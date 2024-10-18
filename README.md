@@ -69,27 +69,32 @@ Before running any scripts, make sure the dataset is set up correctly in the pro
 
 ## How to Run
 
-# 1. Obtaining the Initial Training Data
+## 1. Obtaining the Initial Training Data
 Before running the main training loop, you need to initialize the training set using KMeans++ clustering on the extracted feature vectors. Follow the instructions below based on the model you wish to use for feature extraction:
 
-## Option 1: Using Vision Transformer (ViT) Model
+### Option 1: Using Vision Transformer (ViT) Model
 If you want to initialize the training set using the pre-trained Vision Transformer (ViT) model for feature extraction:
 
-Open and run the kmeans_google_vit.ipynb notebook.
+Open and run the `kmeans_google_vit.ipynb` notebook.
 This notebook will:
-Extract feature vectors for all images using the ViT model.
-Apply KMeans++ clustering to select the initial set of training samples.
+
+- Extract feature vectors for all images using the ViT model.
+- Apply KMeans++ clustering to select the initial set of training samples.
+
 Ensure the required dependencies (such as torch, sklearn, and the ViT pre-trained model) are installed.
 After running the notebook, the initialized training set will be ready for use in subsequent steps.
 
-## Option 2: Using Autoencoder Model
+### Option 2: Using Autoencoder Model
 If you want to initialize the training set using an autoencoder that we trained:
 
 Download the pre-trained autoencoder model from our Google Drive (link provided in the "How to Get the Data" section).
-Place the pre-trained model in the appropriate directory (e.g., /models/).
-Open and run the kmeans_auto_encoder.ipynb notebook.
+Place the pre-trained model in the appropriate directory.
+Open and run the `kmeans_auto_encoder.ipynb` notebook.
+
 This notebook will:
-Load the pre-trained autoencoder model.
-Extract feature vectors for all images using the autoencoder.
-Apply KMeans++ clustering to select the initial set of training samples.
+
+- Load the pre-trained autoencoder model.
+- Extract feature vectors for all images using the autoencoder.
+- Apply KMeans++ clustering to select the initial set of training samples.
+  
 Note: In all strategies, we initialize the training set using KMeans++ with the kmeans_google_vit notebook by default. If you want to use the autoencoder for initialization, you must modify the corresponding cells in the training script accordingly.
