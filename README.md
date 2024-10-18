@@ -33,4 +33,25 @@ The experiments revealed that the feature extraction model significantly influen
    ```sh
    git clone https://github.com/kinan-02/SkinCancer-AL.git
    cd SkinCancer-AL
+   ```
+## Prerequisites
+Before you begin, ensure you have the following software installed on your computer:
+
+- Jupyter Notebook
+- pandas
+- numpy
+- torch
+- matplotlib
+- transformers
+- torchvision
+- sklearn
+- scipy
+- PIL
+- argparse
+
+You can install Python libraries using pip. For example:
+
+```bash
+pip install jupyter pandas numpy torch matplotlib transformers torchvision sklearn scipy PIL argparse
+ ```
    
