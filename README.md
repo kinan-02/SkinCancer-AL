@@ -54,3 +54,17 @@ You can install Python libraries using pip. For example:
 pip install jupyter pandas numpy torch matplotlib transformers torchvision scikit-learn scipy Pillow 
  ```
 ## How to Get The Data
+The dataset used for this project, including training, validation, and test sets, is available for download via the following Google Drive link:
+[Download Dataset from Google Drive](https://drive.google.com/drive/folders/18qQkydqVpx-HI3q6IalgT4bV9hwU_ivr))
+
+### Instructions:
+1. Click on the link above to access the dataset.
+2. Download the entire dataset folder.
+3. After downloading, unzip the folder (if applicable) and place the contents in the appropriate directories.
+
+### Dataset Structure:
+- **train_dataset/**: Contains the images and csv file for the training set.
+- **test_dataset/**: Contains the images and csv file for the test set.
+- **validation_dataset/**: Contains the images and csv file for the validation set.
+
+Before running any scripts, make sure the dataset is set up correctly in the project directory and that you unzip the files you downloaded.
