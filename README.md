@@ -132,3 +132,7 @@ All custom sampling strategies for the project are located in the `Strategies` f
  
    Ensure that the output of your chosen strategy is saved correctly, as the plotting notebook will rely on this data to create the figures.
 
+---
+This completes the instructions for running the notebooks and processing the data for our project. We encourage you to explore the final results, consider potential improvements, and possibly extend the project with your ideas.
+
+**Thank you for following through with our project workflow!**
