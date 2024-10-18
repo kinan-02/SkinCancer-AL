@@ -97,4 +97,38 @@ This notebook will:
 - Extract feature vectors for all images using the autoencoder.
 - Apply KMeans++ clustering to select the initial set of training samples.
   
-Note: In all strategies, we initialize the training set using KMeans++ with the kmeans_google_vit notebook by default. If you want to use the autoencoder for initialization, you must modify the corresponding cells in the training script accordingly.
+#### Note:
+
+In all strategies, we initialize the training set using KMeans++ with the kmeans_google_vit notebook by default. If you want to use the autoencoder for initialization, you must modify the corresponding cells in the training script accordingly.
+
+
+## 2. Running Different Sampling Strategies
+
+All custom sampling strategies for the project are located in the `Strategies` folder. Each strategy is implemented in its own notebook, allowing you to easily experiment with different approaches to active learning.
+
+#### Steps to Run a Strategy:
+
+**Choose a Strategy**: 
+   - Navigate to the `Strategies` folder.
+   - Each notebook in this folder corresponds to a different active learning strategy. Review the strategies and select the one you want to run.
+   - Notebooks are named to reflect the specific strategy they implement (e.g., `random_sampling.ipynb`, `uncertainty_sampling.ipynb`, `custom_sampling_strategy.ipynb`, etc.).
+     
+#### Note:
+
+- Each strategy has its own parameters and methods for selecting samples from the unlabeled pool, so you may want to experiment with different strategies to see which performs best for your task.
+- The **default initialization** of the training set is performed using the Vision Transformer (ViT) model with KMeans++. If you wish to use the Autoencoder for initialization, you’ll need to modify the relevant cells in the notebook as explained in the previous section.
+
+## 3. Visualizing Results
+
+   - After running a strategy, you can visualize the results.
+   - If you would like to generate the plots that were used in our paper, you need to run the `plots.ipynb` notebook.
+   
+   The `plots.ipynb` file generates all the relevant visualizations, including:
+   - Model performance over iterations.
+   - Comparisons of different strategies.
+   - Accuracy vs. number of samples selected, and more.
+     
+ #### Note:
+ 
+   Ensure that the output of your chosen strategy is saved correctly, as the plotting notebook will rely on this data to create the figures.
+
