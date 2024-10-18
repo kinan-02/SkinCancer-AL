@@ -24,3 +24,13 @@ The experiments revealed that the feature extraction model significantly influen
 - [How to deal with the missing data](#How-to-Deal-With-The-Missing-Data)
 - [How to Join The Data](#How-to-Join-The-Data)
 - [How to Run](#how-to-run)
+
+## Installation
+**Clone the Repository**:
+
+   Clone this repository to your local machine using :
+
+   ```sh
+   git clone https://github.com/kinan-02/SkinCancer-AL.git
+   cd SkinCancer-AL
+   
