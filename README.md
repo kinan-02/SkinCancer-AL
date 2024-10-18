@@ -15,3 +15,12 @@ ResNet50, a deep convolutional neural network, was selected as the base model du
 Additionally, density-based approaches, such as KMeans++ clustering and similarity-based methods, were implemented to diversify the selected samples. Finally, hybrid methods like BADGE and Uncertainty KMeans++ were applied to combine uncertainty and diversity in sample selection.
 
 The experiments revealed that the feature extraction model significantly influences the performance of the active learning strategies. Overall, uncertainty-based approaches performed the best, while density-based methods underperformed, likely due to the homogeneity in the skin cancer dataset, which lacks sufficient diversity in the latent space
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Prerequisites](#Prerequisites)
+- [How to Get The Data](#How-to-Get-The-Data)
+- [How to deal with the missing data](#How-to-Deal-With-The-Missing-Data)
+- [How to Join The Data](#How-to-Join-The-Data)
+- [How to Run](#how-to-run)
