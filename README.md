@@ -1,5 +1,10 @@
-# SkinCancer-AL
-
+<h1 align="center">A Robust Active Learning Strategy for Skin Cancer Detection: Combining Multiple Sampling Techniques</h1>
+<p align="center">
+  Samar Samara, Kinan ibraheem, Rawan Badarneh
+  <p align="center">
+    Technion
+  </p>
+</p>
 # Overview of the Project
 
 The project, titled *A Robust Active Learning Strategy for Skin Cancer Detection: Combining Multiple Sampling Techniques*, focuses on improving the classification of skin cancer images using active learning strategies to reduce the need for large labeled datasets. The main challenge in skin cancer classification is that collecting labeled data is expensive and time-consuming, as it often requires expert annotation. The goal of this research is to optimize the labeling process while maintaining high classification accuracy using active learning approaches.
