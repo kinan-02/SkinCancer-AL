@@ -52,6 +52,6 @@ Before you begin, ensure you have the following software installed on your compu
 You can install Python libraries using pip. For example:
 
 ```bash
-pip install jupyter pandas numpy torch matplotlib transformers torchvision sklearn scipy PIL argparse
+pip install jupyter pandas numpy torch matplotlib transformers torchvision sklearn scipy Pillow argparse
  ```
-   
+## How to Get The Data
