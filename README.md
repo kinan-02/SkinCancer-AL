@@ -55,7 +55,7 @@ pip install jupyter pandas numpy torch matplotlib transformers torchvision sciki
  ```
 ## How to Get The Data
 The dataset used for this project, including training, validation, and test sets, is available for download via the following Google Drive link:
-[Download Dataset from Google Drive](https://drive.google.com/drive/folders/18qQkydqVpx-HI3q6IalgT4bV9hwU_ivr))
+[Download Dataset from Google Drive](https://drive.google.com/drive/folders/18qQkydqVpx-HI3q6IalgT4bV9hwU_ivr)
 
 ### Instructions:
 1. Click on the link above to access the dataset.
