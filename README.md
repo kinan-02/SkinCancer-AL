@@ -47,11 +47,10 @@ Before you begin, ensure you have the following software installed on your compu
 - sklearn
 - scipy
 - PIL
-- argparse
 
 You can install Python libraries using pip. For example:
 
 ```bash
-pip install jupyter pandas numpy torch matplotlib transformers torchvision sklearn scipy Pillow argparse
+pip install jupyter pandas numpy torch matplotlib transformers torchvision scikit-learn scipy Pillow 
  ```
 ## How to Get The Data
