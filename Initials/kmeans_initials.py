@@ -1,6 +1,6 @@
 import numpy as np
 import pickle
-from ..DataSet import import_data_loaders
+from dataset.DataSet import import_data_loaders
 from torch.utils.data import DataLoader
 from sklearn.cluster import KMeans
 from Initials.autoEncoder import Autoencoder
