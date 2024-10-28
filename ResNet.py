@@ -6,6 +6,7 @@ from torch.optim import Adam
 
 # Load pre-trained ResNet50 model from torchvision
 base_model = models.resnet50(pretrained=True)
+print("aaa")
 
 # Add a fully connected layer witht the number of classes (for the prediction).
 num_classes = 8
