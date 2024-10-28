@@ -7,6 +7,8 @@ from torch.utils.data import TensorDataset, DataLoader
 from Strategies.Random import _random_sampling
 from Strategies.Uncertainty_Approach.Uncertainty_entropy_based import _uncertainty_sampling
 from Strategies.Uncertainty_Approach.competence_based import _competence_based_sampling
+from Strategies.Uncertainty_Approach.deepfool import _adversial_attack_sampling
+from Strategies.Uncertainty_Approach.prediction_probability_based import _pred_prob_based_sampling
 
 
 def set_seed():
@@ -86,10 +88,22 @@ class ActiveLearningPipeline:
         elif self.selection_criterion == 'competence_based':
             self.available_pool_indices, self.train_indices = _competence_based_sampling(self.model, itr, self.train_df,
                                                                                          self.available_pool_indices,
-                                                                                         self.device, self.iterations+1,
+                                                                                         self.device,
+                                                                                         self.iterations + 1,
                                                                                          self.budget_per_iter,
                                                                                          self.train_indices)
-
+        elif self.selection_criterion == 'deepfool':
+            self.available_pool_indices, self.train_indices = _adversial_attack_sampling(self.available_pool_indices,
+                                                                                         self.train_df, self.model,
+                                                                                         self.device,
+                                                                                         self.budget_per_iter,
+                                                                                         self.train_indices)
+        elif self.selection_criterion == 'pred_prob':
+            self.available_pool_indices, self.train_indices = _pred_prob_based_sampling(self.model, self.train_df,
+                                                                                        self.available_pool_indices,
+                                                                                        self.device,
+                                                                                        self.budget_per_iter,
+                                                                                        self.train_indices)
 
     def calculate_class_weights(self, label_counts, num_classes=8):
         """
