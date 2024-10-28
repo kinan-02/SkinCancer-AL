@@ -1,6 +1,6 @@
 import numpy as np
 import pickle
-from dataset.DataSet import import_data_loaders
+from DataSet.data import import_data_loaders
 from torch.utils.data import DataLoader
 from sklearn.cluster import KMeans
 from Initials.autoEncoder import Autoencoder
@@ -71,7 +71,7 @@ def kmeans_rep(train_features, train_indices):
     kmeans.fit(train_features)
     representative_images = get_representative_images(train_features, train_indices, kmeans)
     print(representative_images)
-    # Get a list of the initial indices for the train dataset.
+    # Get a list of the initial indices for the train DataSet.
     return list(ids.item() for l in representative_images.values() for ids in l)
 
 
