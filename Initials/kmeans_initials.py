@@ -9,6 +9,7 @@ import torchvision.transforms as transforms
 from Initials.ViT import get_vit_model
 import random
 
+
 def set_seed():
     random.seed(0)  # Set seed for NumPy
     np.random.seed(0)  # Set seed for PyTorch (for both CPU and GPU)
@@ -95,3 +96,7 @@ def main():
     with open('vit_initials.pkl', 'wb') as file:
         # Write the list to the file using pickle
         pickle.dump(vit_initials, file)
+
+
+if __name__ == "__main__":
+    main()
