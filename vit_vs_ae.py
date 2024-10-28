@@ -27,7 +27,7 @@ def main():
         image, label, index = train_df[i]
         available_pool_indices.append(index)
 
-    iterations = 20
+    iterations = 1
     budget_per_iter = 60
     num_epoch = 15
     selection_criteria = ['uncertainty_vit', 'uncertainty_ae']
@@ -38,9 +38,10 @@ def main():
             initials = vit_initials
         else:
             initials = ae_initials
+        set_seed()
         resnet = ourResNet()
         model, optimizer, device = resnet.get_model()
-        set_seed()
+
         AL_class = ActiveLearningPipeline(model=model,
                                           available_pool_indices=available_pool_indices,
                                           train_indices=initials,
