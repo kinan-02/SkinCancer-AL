@@ -33,13 +33,12 @@ def main():
     selection_criteria = ['uncertainty_vit', 'uncertainty_ae']
     accuracy_scores_dict = defaultdict(list)
 
-    resnet = ourResNet()
-
     for i, criterion in enumerate(selection_criteria):
         if i == 0:
             initials = vit_initials
         else:
             initials = ae_initials
+        resnet = ourResNet()
         model, optimizer, device = resnet.get_model()
         set_seed()
         AL_class = ActiveLearningPipeline(model=model,
@@ -59,5 +58,6 @@ def main():
     with open('vit_vs_ae_accuracy.pkl', 'wb') as file:
         # Write the list to the file using pickle
         pickle.dump(accuracy_scores_dict, file)
+
 if __name__ == "__main__":
     main()
