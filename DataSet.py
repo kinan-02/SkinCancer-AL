@@ -4,6 +4,7 @@ import torchvision.transforms as transforms
 from torch.utils.data import DataLoader, TensorDataset
 import pandas as pd
 
+print("!!")
 # Define image transformations (resize, convert to tensor)
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
