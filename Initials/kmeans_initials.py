@@ -1,6 +1,9 @@
 import numpy as np
 import pickle
-from DataSet import import_data_loaders
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from DataSet.data import import_data_loaders
 from torch.utils.data import DataLoader
 from sklearn.cluster import KMeans
 from Initials.autoEncoder import Autoencoder
@@ -8,6 +11,7 @@ import torch
 import torchvision.transforms as transforms
 from Initials.ViT import get_vit_model
 import random
+
 
 def set_seed():
     random.seed(0)  # Set seed for NumPy
@@ -71,7 +75,7 @@ def kmeans_rep(train_features, train_indices):
     kmeans.fit(train_features)
     representative_images = get_representative_images(train_features, train_indices, kmeans)
     print(representative_images)
-    # Get a list of the initial indices for the train dataset.
+    # Get a list of the initial indices for the train DataSet.
     return list(ids.item() for l in representative_images.values() for ids in l)
 
 
@@ -79,7 +83,7 @@ def main():
     set_seed()
     train_df, val_loader, test_loader = import_data_loaders()
     ae_model = Autoencoder()
-    ae_model.load_state_dict(torch.load(f"ae_model.pth"))
+    ae_model.load_state_dict(torch.load(f"../ae_model.pth"))
     vit_model, feature_extractor = get_vit_model()
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     ae_model.to(device)
@@ -95,3 +99,7 @@ def main():
     with open('vit_initials.pkl', 'wb') as file:
         # Write the list to the file using pickle
         pickle.dump(vit_initials, file)
+
+
+if __name__ == "__main__":
+    main()
