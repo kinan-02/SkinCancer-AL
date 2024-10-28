@@ -70,8 +70,7 @@ def import_data_loaders():
     val_dataset = dataset(val_df, transform, train='val')
     test_dataset = dataset(test_df, transform, train='test')
 
-    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
     val_loader = DataLoader(val_dataset, batch_size=4, shuffle=False)
     test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
 
-    return train_loader, val_loader, test_loader
+    return train_dataset, val_loader, test_loader
