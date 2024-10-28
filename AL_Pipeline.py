@@ -9,6 +9,7 @@ from Strategies.Uncertainty_Approach.Uncertainty_entropy_based import _uncertain
 from Strategies.Uncertainty_Approach.competence_based import _competence_based_sampling
 from Strategies.Uncertainty_Approach.deepfool import _adversial_attack_sampling
 from Strategies.Uncertainty_Approach.prediction_probability_based import _pred_prob_based_sampling
+from Strategies.Uncertainty_Approach.ceal import _uncertainty_ceal_sampling
 
 
 def set_seed():
@@ -54,6 +55,8 @@ class ActiveLearningPipeline:
         self.selection_criterion = selection_criterion
         self.num_epochs = num_epochs
         self.train_df = train_df
+        self.high_confidence_labels = []
+        self.high_confidence_indices = []
 
     def run_pipeline(self):
         """
@@ -62,20 +65,26 @@ class ActiveLearningPipeline:
         accuracy_scores: list, accuracy scores at each iteration
         """
         accuracy_scores = []
+        confidence_threshold = 0.05
+        dr = 0.0033
         for iteration in range(self.iterations + 1):
             print(f"--------- Number of Iteration {iteration} ---------")
             train_images = [self.train_df.__getitem__(index)[0] for index in self.train_indices]
             label_df = [class_mapping[self.train_df.__getitem__(index)[1]] for index in self.train_indices]
+            if self.selection_criterion == 'ceal':
+                train_images = train_images + [train_df.__getitem__(index)[0] for index in self.high_confidence_indices]
+                label_df = label_df + list(self.high_confidence_labels)
             self._train_model(train_images, label_df)
             # loading the best model weights in each iteration
             if iteration != 0:
                 self.model.load_state_dict(torch.load(f"best_{self.selection_criterion}_model.pth"))
             accuracy = self._evaluate_model()
             accuracy_scores.append(accuracy)
-            self._sampling_strategy(iteration)
+            self._sampling_strategy(iteration, confidence_threshold)
+            confidence_threshold -= dr * iteration
         return accuracy_scores
 
-    def _sampling_strategy(self, itr):
+    def _sampling_strategy(self, itr, confidence_threshold):
         if self.selection_criterion == 'random':
             self.available_pool_indices, self.train_indices = _random_sampling(self.available_pool_indices,
                                                                                self.budget_per_iter,
@@ -104,6 +113,10 @@ class ActiveLearningPipeline:
                                                                                         self.device,
                                                                                         self.budget_per_iter,
                                                                                         self.train_indices)
+        elif self.selection_criterion == 'ceal':
+            self.available_pool_indices, self.train_indices, self.high_confidence_labels, self.high_confidence_indices = _uncertainty_ceal_sampling(
+                confidence_threshold, self.model, self.device, self.available_pool_indices, self.train_df, self.budget_per_iter,
+                self.train_indices)
 
     def calculate_class_weights(self, label_counts, num_classes=8):
         """

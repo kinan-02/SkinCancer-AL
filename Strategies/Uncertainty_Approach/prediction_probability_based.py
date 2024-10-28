@@ -15,7 +15,8 @@ def get_pool_loader(train_df, available_pool_indices):
 def calculate_p_score(outputs, c):
     probabilities = torch.cat(outputs, dim=0)
     # ignoring the paddings
-    probabilities = probabilities[:-c]
+    if c != 0:
+        probabilities = probabilities[:-c]
     probabilities_cpu = probabilities.cpu().numpy()
     p_scores = []
     # caculating the p_score for each sample
