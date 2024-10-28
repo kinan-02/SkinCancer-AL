@@ -72,7 +72,7 @@ class ActiveLearningPipeline:
             train_images = [self.train_df.__getitem__(index)[0] for index in self.train_indices]
             label_df = [self.train_df.__getitem__(index)[1] for index in self.train_indices]
             if self.selection_criterion == 'ceal':
-                train_images = train_images + [train_df.__getitem__(index)[0] for index in self.high_confidence_indices]
+                train_images = train_images + [self.train_df.__getitem__(index)[0] for index in self.high_confidence_indices]
                 label_df = label_df + list(self.high_confidence_labels)
             self._train_model(train_images, label_df)
             # loading the best model weights in each iteration
