@@ -32,9 +32,9 @@ def main():
     accuracy_scores_dict = defaultdict(list)
 
     for criterion in selection_criteria:
+        set_seed()
         resnet = ourResNet()
         model, optimizer, device = resnet.get_model()
-        set_seed()
         AL_class = ActiveLearningPipeline(model=model,
                                           available_pool_indices=available_pool_indices,
                                           train_indices=vit_initials,
