@@ -70,7 +70,7 @@ class ActiveLearningPipeline:
                 self.model.load_state_dict(torch.load(f"best_{self.selection_criterion}_model.pth"))
             accuracy = self._evaluate_model()
             accuracy_scores.append(accuracy)
-            self._sampling_strategy()
+            self._sampling_strategy(iteration)
         return accuracy_scores
 
     def _sampling_strategy(self, itr):
