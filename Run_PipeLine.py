@@ -48,6 +48,8 @@ def main():
                                           test_loader=test_loader,
                                           train_df=train_df)
         accuracy_scores_dict[criterion] = AL_class.run_pipeline()
-
+    with open('uncertainty_approaches_accuracy.pkl', 'wb') as file:
+        # Write the list to the file using pickle
+        pickle.dump(accuracy_scores_dict, file)
 if __name__ == "__main__":
     main()
