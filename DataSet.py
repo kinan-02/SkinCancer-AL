@@ -3,6 +3,7 @@ import os
 
 import torchvision.transforms as transforms
 
+print("!!")
 # Define image transformations (resize, convert to tensor)
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
