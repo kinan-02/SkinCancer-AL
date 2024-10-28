@@ -2,8 +2,8 @@ import numpy as np
 import torch
 from torch.utils.data import TensorDataset, DataLoader
 
-def _competence_based_sampling(model, itr, train_df, available_pool_indices, device, iterations, budget_per_iter, train_indices):
 
+def _get_poolLoader(available_pool_indices, train_df):
     X_unlabeled = [train_df.__getitem__(index)[0] for index in available_pool_indices]
 
     pool_images_tensor = torch.stack(X_unlabeled)
@@ -11,18 +11,10 @@ def _competence_based_sampling(model, itr, train_df, available_pool_indices, dev
 
     batch_size = 32
     pool_loader = DataLoader(pool_dataset, batch_size=batch_size, shuffle=False)
-    model.eval()
-    outputs = []
-    with torch.no_grad():
-        for inputs in pool_loader:
-            inputs = inputs[0]
-            inputs = inputs.to(device)
-            x = model(inputs)
-            if x.shape[0] != batch_size:
-                padding_tensor = torch.full((batch_size - x.shape[0], 8), 0).to(device)
-                c = batch_size - x.shape[0]
-                x = torch.cat([x, padding_tensor])
-            outputs.append(x)
+    return pool_loader
+
+
+def calc_pscores_cdf(outputs, c):
     probabilities = torch.cat(outputs, dim=0)
     probabilities = probabilities[:-c]
     probabilities_cpu = probabilities.cpu().numpy()
@@ -34,12 +26,10 @@ def _competence_based_sampling(model, itr, train_df, available_pool_indices, dev
 
     p_scores = np.array(p_scores)
     cdf = np.cumsum(p_scores) / np.sum(p_scores)
+    return p_scores, cdf
 
-    C0 = 0.5
-    c_t = min(1, np.sqrt((itr / iterations) * (1 - C0 ** 2) / iterations + C0 ** 2))
 
-    selected_indices = np.where(p_scores > c_t)[0]
-
+def sample_indices(selected_indices, budget_per_iter, p_scores, cdf):
     if len(selected_indices) > 0:
         if selected_indices.shape[0] < budget_per_iter:
             sampled_indices = selected_indices.tolist()
@@ -54,13 +44,42 @@ def _competence_based_sampling(model, itr, train_df, available_pool_indices, dev
                                                replace=False)
     else:
         sampled_indices = np.random.choice(len(p_scores), budget_per_iter, replace=False)
+    return sampled_indices
 
+
+def update_indices(available_pool_indices, sampled_indices, train_indices):
     temp = np.array(available_pool_indices)
     selected_indices = temp[sampled_indices]
-
     train_indices = train_indices + selected_indices.tolist()
-
     available_pool_set = set(available_pool_indices)
     train_set = set(train_indices)
     available_pool_indices = list(available_pool_set - train_set)
+    return available_pool_indices, train_indices
+
+
+def _competence_based_sampling(model, itr, train_df, available_pool_indices, device, iterations, budget_per_iter,
+                               train_indices):
+    pool_loader = _get_poolLoader(available_pool_indices, train_df)
+    batch_size = 32
+    model.eval()
+    outputs = []
+    c=0
+    with torch.no_grad():
+        for inputs in pool_loader:
+            inputs = inputs[0]
+            inputs = inputs.to(device)
+            x = model(inputs)
+            if x.shape[0] != batch_size:
+                padding_tensor = torch.full((batch_size - x.shape[0], 8), 0).to(device)
+                c = batch_size - x.shape[0]
+                x = torch.cat([x, padding_tensor])
+            outputs.append(x)
+    p_scores, cdf = calc_pscores_cdf(outputs, c)
+    C0 = 0.5
+    c_t = min(1, np.sqrt((itr / iterations) * (1 - C0 ** 2) / iterations + C0 ** 2))
+
+    selected_indices = np.where(p_scores > c_t)[0]
+    # update train_indices and available pool indices
+    sampled_indices = sample_indices(selected_indices, budget_per_iter, p_scores, cdf)
+    available_pool_indices, train_indices = update_indices(available_pool_indices, sampled_indices, train_indices)
     return available_pool_indices, train_indices
