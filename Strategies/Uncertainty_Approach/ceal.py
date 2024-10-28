@@ -1,8 +1,10 @@
 import numpy as np
 import torch
 from torch.utils.data import TensorDataset, DataLoader
+from scipy.stats import entropy
+
 def get_pool_loader(available_pool_indices, train_df):
-    X_unlabeled = [train_df.__getitem__(index)[0] for index in self.available_pool_indices]
+    X_unlabeled = [train_df.__getitem__(index)[0] for index in available_pool_indices]
 
     pool_images_tensor = torch.stack(X_unlabeled)
     pool_dataset = TensorDataset(pool_images_tensor)
@@ -12,7 +14,7 @@ def get_pool_loader(available_pool_indices, train_df):
     return pool_loader
 
 
-def calculate_uncertainty(outputs, c):
+def calculate_uncertainty(outputs, c, budget_per_iter, available_pool_indices, confidence_threshold):
     probabilities = torch.cat(outputs, dim=0)
     # ignoring the paddings
     if c != 0:
@@ -34,6 +36,7 @@ def _uncertainty_ceal_sampling(confidence_threshold, model, device, available_po
     """
     The Cost effective active learning strategy
     """
+    batch_size = 32
     pool_loader = get_pool_loader(available_pool_indices, train_df)
     model.eval()
     outputs = []
@@ -49,7 +52,7 @@ def _uncertainty_ceal_sampling(confidence_threshold, model, device, available_po
                 c = batch_size - x.shape[0]
                 x = torch.cat([x, padding_tensor])
             outputs.append(x)
-    selected_indices, high_confidence_indices, high_confidence_labels = calculate_uncertainty(outputs, c)
+    selected_indices, high_confidence_indices, high_confidence_labels = calculate_uncertainty(outputs, c, budget_per_iter, available_pool_indices, confidence_threshold)
 
     train_indices = train_indices + selected_indices.tolist()
 
