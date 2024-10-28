@@ -1,7 +1,8 @@
 from PIL import Image
 import os
-
 import torchvision.transforms as transforms
+from torch.utils.data import DataLoader, TensorDataset
+import pandas as pd
 
 # Define image transformations (resize, convert to tensor)
 transform = transforms.Compose([
@@ -59,3 +60,19 @@ class Dataset():
         if self.train == 'val':
             return image, class_mapping[img_label], index
         return image, img_label, index
+
+def import_data_loaders():
+    train_df = pd.read_csv('train_dataset/metadata.csv')
+    test_df = pd.read_csv('test_dataset/metadata.csv')
+    val_df = pd.read_csv('validation_dataset/metadata.csv')
+
+    train_df = Dataset(train_df, transform)
+    val_df = Dataset(val_df, transform, train='val')
+    test_df = Dataset(test_df, transform, train='test')
+
+    batch_size = 4
+    val_loader = DataLoader(val_df, batch_size=batch_size, shuffle=False)
+
+    batch_size = 32
+    test_loader = DataLoader(test_df, batch_size=batch_size, shuffle=False)
+    return train_df, val_loader, test_loader
