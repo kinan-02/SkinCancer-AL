@@ -34,11 +34,11 @@ class ActiveLearningPipeline:
     def __init__(self, model,
                  available_pool_indices,
                  train_indices,
-                 test_indices,
                  selection_criterion,
                  iterations,
                  budget_per_iter,
-                 num_epochs, device, optimizer, val_loader, test_loader, train_df):
+                 num_epochs,
+                 device, optimizer, val_loader, test_loader, train_df):
         self.model = model
         self.device = device
         self.optimizer = optimizer
@@ -48,7 +48,6 @@ class ActiveLearningPipeline:
         self.budget_per_iter = budget_per_iter
         self.available_pool_indices = available_pool_indices
         self.train_indices = train_indices
-        self.test_indices = test_indices
         self.selection_criterion = selection_criterion
         self.num_epochs = num_epochs
         self.train_df = train_df
@@ -176,7 +175,6 @@ class ActiveLearningPipeline:
                 labels = torch.tensor(labels).to(self.device)
 
                 outputs = self.model(inputs)
-                # outputs = outputs.logits
                 _, preds = torch.max(outputs, 1)
 
                 running_corrects += torch.sum(preds == labels)
