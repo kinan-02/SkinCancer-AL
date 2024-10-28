@@ -30,7 +30,7 @@ def main():
     iterations = 20
     budget_per_iter = 60
     num_epoch = 15
-    selection_criteria = ['uncertainty', 'uncertainty']
+    selection_criteria = ['uncertainty_vit', 'uncertainty_ae']
     accuracy_scores_dict = defaultdict(list)
 
     resnet = ourResNet()
