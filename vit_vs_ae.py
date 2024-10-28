@@ -34,12 +34,13 @@ def main():
     accuracy_scores_dict = defaultdict(list)
 
     resnet = ourResNet()
-    model, optimizer, device = resnet.get_model()
+
     for i, criterion in enumerate(selection_criteria):
         if i == 0:
             initials = vit_initials
         else:
             initials = ae_initials
+        model, optimizer, device = resnet.get_model()
         set_seed()
         AL_class = ActiveLearningPipeline(model=model,
                                           available_pool_indices=available_pool_indices,
