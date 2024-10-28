@@ -77,7 +77,7 @@ class ActiveLearningPipeline:
             self.available_pool_indices, self.train_indices = _random_sampling(self.available_pool_indices,
                                                                                self.budget_per_iter,
                                                                                self.train_indices)
-        elif self.selection_criterion == 'uncertainty':
+        elif self.selection_criterion == 'uncertainty_ae' or self.selection_criterion == 'uncertainty_vit':
             self.available_pool_indices, self.train_indices = _uncertainty_sampling(self.model, self.train_df,
                                                                                     self.available_pool_indices,
                                                                                     self.train_indices, self.device,
