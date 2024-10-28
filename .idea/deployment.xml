@@ -1,50 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData">
     <serverData>
-      <paths name="student@13.64.146.227:22 password">
+      <paths name="student@40.112.146.139:22">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
-      <paths name="student@13.64.79.50:22 password">
+      <paths name="student@nlpgpu2023w-0008.westus.cloudapp.azure.com:22">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
-      <paths name="student@13.64.79.50:22 password (2)">
+      <paths name="student@nlpgpu2023w-0008.westus.cloudapp.azure.com:22 (2)">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
-      <paths name="student@13.93.196.79:22 password">
+      <paths name="student@nlpgpu2023w-0008.westus.cloudapp.azure.com:22 (3)">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
-      <paths name="student@13.93.238.97:22 password">
+      <paths name="student@nlpgpu2023w-0008.westus.cloudapp.azure.com:22 (4)">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
-      <paths name="student@13.93.238.97:22 password (2)">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="student@40.83.184.242:22 password">
+      <paths name="student@nlpgpu2023w-0127.westus.cloudapp.azure.com:22">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
