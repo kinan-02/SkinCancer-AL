@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import pickle
+from ..DataSet import import_data_loaders
 from torch.utils.data import DataLoader
 from sklearn.cluster import KMeans
 from Initials.autoEncoder import Autoencoder
@@ -8,12 +9,7 @@ import torch
 import torchvision.transforms as transforms
 from Initials.ViT import get_vit_model
 import random
-import sys
-import os
 
-# Add the root directory to the Python path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-import DataSet
 def set_seed():
     random.seed(0)  # Set seed for NumPy
     np.random.seed(0)  # Set seed for PyTorch (for both CPU and GPU)
@@ -82,7 +78,7 @@ def kmeans_rep(train_features, train_indices):
 
 def main():
     set_seed()
-    train_df, val_loader, test_loader = DataSet.import_data_loaders()
+    train_df, val_loader, test_loader = import_data_loaders()
     ae_model = Autoencoder()
     ae_model.load_state_dict(torch.load(f"ae_model.pth"))
     vit_model, feature_extractor = get_vit_model()
