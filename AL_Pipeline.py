@@ -1,3 +1,5 @@
+import os.path
+
 import numpy as np
 from collections import defaultdict
 import random
@@ -77,7 +79,8 @@ class ActiveLearningPipeline:
             self._train_model(train_images, label_df)
             # loading the best model weights in each iteration
             if iteration != 0:
-                self.model.load_state_dict(torch.load(f"best_{self.selection_criterion}_model.pth"))
+                path = os.path.join('best_models', f"best_{self.selection_criterion}_model.pth")
+                self.model.load_state_dict(torch.load(path))
             accuracy = self._evaluate_model()
             accuracy_scores.append(accuracy)
             self._sampling_strategy(iteration, confidence_threshold)
@@ -193,7 +196,8 @@ class ActiveLearningPipeline:
             val_acc = self._check_model()
             if val_acc > best_acc:
                 best_acc = val_acc
-                torch.save(self.model.state_dict(), f"best_{self.selection_criterion}_model.pth")
+                path = os.path.join('best_models', f"best_{self.selection_criterion}_model.pth")
+                torch.save(self.model.state_dict(), path)
         print("--" * 30)
 
     def _check_model(self):
