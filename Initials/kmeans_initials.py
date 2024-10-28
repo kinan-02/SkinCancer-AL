@@ -4,10 +4,10 @@ import pickle
 from DataSet import import_data_loaders
 from torch.utils.data import DataLoader
 from sklearn.cluster import KMeans
-from autoEncoder import Autoencoder
+from Initials.autoEncoder import Autoencoder
 import torch
 import torchvision.transforms as transforms
-from ViT import get_vit_model
+from Initials.ViT import get_vit_model
 import random
 
 def set_seed():
