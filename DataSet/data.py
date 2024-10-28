@@ -22,7 +22,7 @@ class_mapping = {
     "vascular lesion":7
 }
 
-class Dataset():
+class dataset():
     def __init__(self, dataframe, transform, train='train'):
         self.dataframe=dataframe
         self.train = train
@@ -67,9 +67,9 @@ def import_data_loaders():
     test_df = pd.read_csv('test_dataset/metadata.csv')
     val_df = pd.read_csv('validation_dataset/metadata.csv')
 
-    train_df = Dataset(train_df, transform)
-    val_df = Dataset(val_df, transform, train='val')
-    test_df = Dataset(test_df, transform, train='test')
+    train_df = dataset(train_df, transform)
+    val_df = dataset(val_df, transform, train='val')
+    test_df = dataset(test_df, transform, train='test')
 
     batch_size = 4
     val_loader = DataLoader(val_df, batch_size=batch_size, shuffle=False)
