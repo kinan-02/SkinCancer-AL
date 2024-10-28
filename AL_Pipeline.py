@@ -66,7 +66,8 @@ class ActiveLearningPipeline:
             self._train_model(train_images, label_df)
             # loading the best model weights in each iteration
             if iteration != 0:
-                self.model.load_state_dict(torch.load(f"best_{self.selection_criterion}_model.pth"))
+                path = os.path.join("best_models", f"best_{self.selection_criterion}_model.pth")
+                self.model.load_state_dict(torch.load(path))
             accuracy = self._evaluate_model()
             accuracy_scores.append(accuracy)
             self._sampling_strategy()
