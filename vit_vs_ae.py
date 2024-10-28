@@ -16,6 +16,7 @@ def set_seed():
     torch.backends.cudnn.benchmark = False
 
 def main():
+    print("Starting the PipeLine...")
     train_df, val_loader, test_loader = import_data_loaders()
     with open('Initials/vit_initials.pkl', 'rb') as file:
         vit_initials = pickle.load(file)
