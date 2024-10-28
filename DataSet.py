@@ -10,8 +10,6 @@ transform = transforms.Compose([
     transforms.ToTensor()
 ])
 
-
-
 class_mapping = {
     "actinic keratosis": 0,
     "basal cell carcinoma": 1,
