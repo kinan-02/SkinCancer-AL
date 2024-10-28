@@ -6,7 +6,7 @@ import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader
 from Strategies.Random import _random_sampling
 from Strategies.Uncertainty_Approach.Uncertainty_entropy_based import _uncertainty_sampling
-
+import os
 
 def set_seed():
     random.seed(0)  # Set seed for NumPy
@@ -158,7 +158,8 @@ class ActiveLearningPipeline:
             val_acc = self._check_model()
             if val_acc > best_acc:
                 best_acc = val_acc
-                torch.save(self.model.state_dict(), f"best_{self.selection_criterion}_model.pth")
+                path = os.path.join("best_models", f"best_{self.selection_criterion}_model.pth")
+                torch.save(self.model.state_dict(), path)
         print("--" * 30)
 
     def _check_model(self):
