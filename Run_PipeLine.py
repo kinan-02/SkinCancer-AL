@@ -31,9 +31,9 @@ def main():
     selection_criteria = ['random', 'uncertainty']
     accuracy_scores_dict = defaultdict(list)
 
-    resnet = ourResNet()
-    model, optimizer, device = resnet.get_model()
     for criterion in selection_criteria:
+        resnet = ourResNet()
+        model, optimizer, device = resnet.get_model()
         set_seed()
         AL_class = ActiveLearningPipeline(model=model,
                                           available_pool_indices=available_pool_indices,

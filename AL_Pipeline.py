@@ -6,7 +6,8 @@ import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader
 from Strategies.Random import _random_sampling
 from Strategies.Uncertainty_Approach.Uncertainty_entropy_based import _uncertainty_sampling
-import os
+from Strategies.Uncertainty_Approach.competence_based import _competence_based_sampling
+
 
 def set_seed():
     random.seed(0)  # Set seed for NumPy
@@ -62,18 +63,17 @@ class ActiveLearningPipeline:
         for iteration in range(self.iterations + 1):
             print(f"--------- Number of Iteration {iteration} ---------")
             train_images = [self.train_df.__getitem__(index)[0] for index in self.train_indices]
-            label_df = [self.train_df.__getitem__(index)[1] for index in self.train_indices]
+            label_df = [class_mapping[self.train_df.__getitem__(index)[1]] for index in self.train_indices]
             self._train_model(train_images, label_df)
             # loading the best model weights in each iteration
             if iteration != 0:
-                path = os.path.join("best_models", f"best_{self.selection_criterion}_model.pth")
-                self.model.load_state_dict(torch.load(path))
+                self.model.load_state_dict(torch.load(f"best_{self.selection_criterion}_model.pth"))
             accuracy = self._evaluate_model()
             accuracy_scores.append(accuracy)
             self._sampling_strategy()
         return accuracy_scores
 
-    def _sampling_strategy(self):
+    def _sampling_strategy(self, itr):
         if self.selection_criterion == 'random':
             self.available_pool_indices, self.train_indices = _random_sampling(self.available_pool_indices,
                                                                                self.budget_per_iter,
@@ -83,6 +83,13 @@ class ActiveLearningPipeline:
                                                                                     self.available_pool_indices,
                                                                                     self.train_indices, self.device,
                                                                                     self.budget_per_iter)
+        elif self.selection_criterion == 'competence_based':
+            self.available_pool_indices, self.train_indices = _competence_based_sampling(self.model, itr, self.train_df,
+                                                                                         self.available_pool_indices,
+                                                                                         self.device, self.iterations+1,
+                                                                                         self.budget_per_iter,
+                                                                                         self.train_indices)
+
 
     def calculate_class_weights(self, label_counts, num_classes=8):
         """
@@ -159,8 +166,7 @@ class ActiveLearningPipeline:
             val_acc = self._check_model()
             if val_acc > best_acc:
                 best_acc = val_acc
-                path = os.path.join("best_models", f"best_{self.selection_criterion}_model.pth")
-                torch.save(self.model.state_dict(), path)
+                torch.save(self.model.state_dict(), f"best_{self.selection_criterion}_model.pth")
         print("--" * 30)
 
     def _check_model(self):
