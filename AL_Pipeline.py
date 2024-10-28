@@ -1,15 +1,11 @@
-import pandas as pd
 import numpy as np
-import pickle
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC
-from sklearn.linear_model import LogisticRegression
-from scipy.stats import entropy
 from collections import defaultdict
-import argparse
-from matplotlib import pyplot as plt
 import random
 import torch
+import torch.nn as nn
+from torch.utils.data import TensorDataset, DataLoader
+
+from Strategies.Random import _random_sampling
 
 
 def set_seed():
@@ -42,7 +38,7 @@ class ActiveLearningPipeline:
                  selection_criterion,
                  iterations,
                  budget_per_iter,
-                 num_epochs, device, optimizer, val_loader, test_loader):
+                 num_epochs, device, optimizer, val_loader, test_loader, train_df):
         self.model = model
         self.device = device
         self.optimizer = optimizer
@@ -54,10 +50,8 @@ class ActiveLearningPipeline:
         self.train_indices = train_indices
         self.test_indices = test_indices
         self.selection_criterion = selection_criterion
-        if self.selection_criterion == 'random':
-            self.train_indices = []
         self.num_epochs = num_epochs
-        # self.best_acc = 0
+        self.train_df = train_df
 
     def run_pipeline(self):
         """
@@ -68,8 +62,8 @@ class ActiveLearningPipeline:
         accuracy_scores = []
         for iteration in range(self.iterations + 1):
             print(f"--------- Number of Iteration {iteration} ---------")
-            train_images = [train_df.__getitem__(index)[0] for index in self.train_indices]
-            label_df = [class_mapping[train_df.__getitem__(index)[1]] for index in self.train_indices]
+            train_images = [self.train_df.__getitem__(index)[0] for index in self.train_indices]
+            label_df = [class_mapping[self.train_df.__getitem__(index)[1]] for index in self.train_indices]
             self._train_model(train_images, label_df)
             # loading the best model weights in each iteration
             if iteration != 0:
@@ -81,11 +75,11 @@ class ActiveLearningPipeline:
 
     def _sampling_strategy(self):
         if self.selection_criterion == 'random':
-            self._random_sampling()
+            self.available_pool_indices, self.train_indices = self._random_sampling(self.available_pool_indices,
+                                                                                    self.budget_per_iter,
+                                                                                    self.train_indices)
         elif self.selection_criterion == 'BADGE':
             self._badge_sampling()
-        else:
-            self._custom_sampling(iteration)
 
     def calculate_class_weights(self, label_counts, num_classes=8):
         """
@@ -145,7 +139,7 @@ class ActiveLearningPipeline:
         label_counts = defaultdict(int)
         for label in label_df:
             label_counts[label] += 1
-        class_weights = self.calculate_class_weights(label_counts, 8).to(device)
+        class_weights = self.calculate_class_weights(label_counts, 8).to(self.device)
         # Giving higher weight for the loss of samples that their class is a minority in the data while giving less weight
         # to the loss for classes that are majority
         loss_f = nn.CrossEntropyLoss(weight=class_weights)
