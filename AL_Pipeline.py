@@ -4,8 +4,8 @@ import random
 import torch
 import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader
-
 from Strategies.Random import _random_sampling
+from Strategies.Uncertainty_Approach.Uncertainty_entropy_based import _uncertainty_sampling
 
 
 def set_seed():
@@ -75,11 +75,14 @@ class ActiveLearningPipeline:
 
     def _sampling_strategy(self):
         if self.selection_criterion == 'random':
-            self.available_pool_indices, self.train_indices = self._random_sampling(self.available_pool_indices,
-                                                                                    self.budget_per_iter,
-                                                                                    self.train_indices)
-        elif self.selection_criterion == 'BADGE':
-            self._badge_sampling()
+            self.available_pool_indices, self.train_indices = _random_sampling(self.available_pool_indices,
+                                                                               self.budget_per_iter,
+                                                                               self.train_indices)
+        elif self.selection_criterion == 'uncertainty_sampling':
+            self.available_pool_indices, self.train_indices = _uncertainty_sampling(self.model, self.train_df,
+                                                                                    self.available_pool_indices,
+                                                                                    self.train_indices, self.device,
+                                                                                    self.budget_per_iter)
 
     def calculate_class_weights(self, label_counts, num_classes=8):
         """
