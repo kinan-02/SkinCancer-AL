@@ -62,7 +62,7 @@ class ActiveLearningPipeline:
         for iteration in range(self.iterations + 1):
             print(f"--------- Number of Iteration {iteration} ---------")
             train_images = [self.train_df.__getitem__(index)[0] for index in self.train_indices]
-            label_df = [class_mapping[self.train_df.__getitem__(index)[1]] for index in self.train_indices]
+            label_df = [self.train_df.__getitem__(index)[1] for index in self.train_indices]
             self._train_model(train_images, label_df)
             # loading the best model weights in each iteration
             if iteration != 0:
