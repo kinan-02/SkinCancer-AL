@@ -2,20 +2,29 @@
 <project version="4">
   <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
+<<<<<<< HEAD
       <paths name="student@40.112.146.139:22">
+=======
+      <paths name="student@13.91.177.135:22">
+>>>>>>> origin/main
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
+<<<<<<< HEAD
       <paths name="student@nlpgpu2023w-0008.westus.cloudapp.azure.com:22">
+=======
+      <paths name="student@13.91.177.135:22 (2)">
+>>>>>>> origin/main
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
+<<<<<<< HEAD
       <paths name="student@nlpgpu2023w-0008.westus.cloudapp.azure.com:22 (2)">
         <serverdata>
           <mappings>
@@ -38,6 +47,9 @@
         </serverdata>
       </paths>
       <paths name="student@nlpgpu2023w-0127.westus.cloudapp.azure.com:22">
+=======
+      <paths name="student@20.232.209.35:22">
+>>>>>>> origin/main
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
