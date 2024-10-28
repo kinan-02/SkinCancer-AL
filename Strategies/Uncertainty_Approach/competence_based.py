@@ -16,7 +16,8 @@ def _get_poolLoader(available_pool_indices, train_df):
 
 def calc_pscores_cdf(outputs, c):
     probabilities = torch.cat(outputs, dim=0)
-    probabilities = probabilities[:-c]
+    if c != 0 :
+        probabilities = probabilities[:-c]
     probabilities_cpu = probabilities.cpu().numpy()
     p_scores = []
     for prob in probabilities_cpu:
