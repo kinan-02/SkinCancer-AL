@@ -27,7 +27,7 @@ def main():
         image, label, index = train_df[i]
         available_pool_indices.append(index)
 
-    iterations = 1
+    iterations = 20
     budget_per_iter = 60
     num_epoch = 15
     selection_criteria = ['uncertainty_vit', 'uncertainty_ae']
