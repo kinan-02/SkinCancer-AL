@@ -17,6 +17,7 @@ from Strategies.Diversity_Approach.kmeans_NumClasses import _kmeans_NumClasses_s
 from Strategies.Diversity_Approach.similarity_based import _similarity_based_sampling
 from Strategies.Hybrid_Approach.BADGE import _badge_sampling
 from Strategies.Hybrid_Approach.Uncertainty_KMeans import _uncertainty_kmeans_sampling
+from Strategies.Hybrid_Approach.custom_sampling import _custom_sampling
 from torchvision import transforms
 from Initials.ViT import get_vit_model
 
@@ -119,6 +120,11 @@ class ActiveLearningPipeline:
                 self.model, self.train_df, self.available_pool_indices, self.device, self.budget_per_iter,
                 self.iterations,
                 self.pool_features, self.pool_indices, self.train_indices)
+        if self.selection_criterion == 'Custom':
+            self.available_pool_indices, self.train_indices, self.train_features, self.pool_features, self.pool_indices = _custom_sampling(
+                self.model, self.available_pool_indices, self.train_df, self.train_indices, self.train_features,
+                self.pool_features,
+                self.budget_per_iter, self.pool_indices, self.device)
 
     def _diversity_sampling_strategy(self):
         if self.selection_criterion == 'kmeans_budget':
