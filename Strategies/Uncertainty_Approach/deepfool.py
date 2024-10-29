@@ -40,7 +40,8 @@ def _adversial_attack_sampling(available_pool_indices, train_df, model, device, 
     # Load the attack strategy.
     fmodel = fb.PyTorchModel(model, bounds=(0, 255))
     attack = fb.attacks.FGSM()
-    adversarial_images, outputs = []
+    adversarial_images = []
+    outputs = []
     model.eval()
     epsilons = [0.01]
     for inputs, index in pool_loader:
