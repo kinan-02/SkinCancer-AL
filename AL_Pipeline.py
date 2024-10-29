@@ -83,7 +83,7 @@ class ActiveLearningPipeline:
         accuracy_scores = []
         confidence_threshold = 0.05
         dr = 0.0033
-        if self.appraoch == "Diversity" or (self.approach == "Hybrid" and self.selection_criterion != 'BADGE'):
+        if self.approach == "Diversity" or (self.approach == "Hybrid" and self.selection_criterion != 'BADGE'):
             self._get_features()
         for iteration in range(self.iterations + 1):
             print(f"--------- Number of Iteration {iteration} ---------")
