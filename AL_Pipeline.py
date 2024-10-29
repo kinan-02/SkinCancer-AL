@@ -87,6 +87,7 @@ class ActiveLearningPipeline:
             self._get_features()
         for iteration in range(self.iterations + 1):
             print(f"--------- Number of Iteration {iteration} ---------")
+            # Preparing train data
             train_images = [self.train_df.__getitem__(index)[0] for index in self.train_indices]
             label_df = [self.train_df.__getitem__(index)[1] for index in self.train_indices]
             if self.selection_criterion == 'ceal':
@@ -98,8 +99,10 @@ class ActiveLearningPipeline:
             if iteration != 0:
                 path = os.path.join('best_models', f"best_{self.selection_criterion}_model.pth")
                 self.model.load_state_dict(torch.load(path))
+            # Evaluate Model
             accuracy = self._evaluate_model()
             accuracy_scores.append(accuracy)
+            # Selecting Strategy
             if self.approach == "Uncertainty":
                 self._uncertainty_sampling_strategy(iteration, confidence_threshold)
             elif self.approach == "Diversity":
