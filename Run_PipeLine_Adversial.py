@@ -25,7 +25,7 @@ def main():
         image, label, index = train_df[i]
         available_pool_indices.append(index)
 
-    iterations = 20
+    iterations = 6
     selection_criteria = ['deepfool_100', 'deepfool_200']
     num_epoch = 15
     accuracy_scores_dict = defaultdict(list)
