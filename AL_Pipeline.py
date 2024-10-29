@@ -13,8 +13,10 @@ from Strategies.Uncertainty_Approach.deepfool import _adversial_attack_sampling
 from Strategies.Uncertainty_Approach.prediction_probability_based import _pred_prob_based_sampling
 from Strategies.Uncertainty_Approach.ceal import _uncertainty_ceal_sampling
 from Strategies.Diversity_Approach.kmeans_budget_vit import _kmeans_sampling
+from Strategies.Diversity_Approach.kmeans_NumClasses import _kmeans_NumClasses_sampling
 from torchvision import transforms
 from Initials.ViT import get_vit_model
+
 
 def set_seed():
     random.seed(0)  # Set seed for NumPy
@@ -84,7 +86,8 @@ class ActiveLearningPipeline:
             train_images = [self.train_df.__getitem__(index)[0] for index in self.train_indices]
             label_df = [self.train_df.__getitem__(index)[1] for index in self.train_indices]
             if self.selection_criterion == 'ceal':
-                train_images = train_images + [self.train_df.__getitem__(index)[0] for index in self.high_confidence_indices]
+                train_images = train_images + [self.train_df.__getitem__(index)[0] for index in
+                                               self.high_confidence_indices]
                 label_df = label_df + list(self.high_confidence_labels)
             self._train_model(train_images, label_df)
             # loading the best model weights in each iteration
@@ -101,10 +104,18 @@ class ActiveLearningPipeline:
                 self._hybrid_sampling_strategy(iteration, confidence_threshold)
             confidence_threshold -= dr * iteration
         return accuracy_scores
+
     def _diversity_sampling_strategy(self):
         if self.selection_criterion == 'kmeans_budget':
             self.available_pool_indices, self.train_indices, self.pool_features, self.pool_indices = (
-                _kmeans_sampling(self.available_pool_indices, self.budget_per_iter, self.pool_features, self.pool_indices, self.train_indices))
+                _kmeans_sampling(self.available_pool_indices, self.budget_per_iter, self.pool_features,
+                                 self.pool_indices, self.train_indices))
+        if self.selection_criterion == 'KMeans_Nearest':
+            self.available_pool_indices, self.train_indices, self.pool_features, self.pool_indices = _kmeans_NumClasses_sampling(
+                self.pool_features, self.pool_indices, self.train_indices, self.available_pool_indices, True)
+        if self.selection_criterion=='KMeans_NearestFarthest':
+            self.available_pool_indices, self.train_indices, self.pool_features, self.pool_indices = _kmeans_NumClasses_sampling(
+                self.pool_features, self.pool_indices, self.train_indices, self.available_pool_indices, False)
 
     def _uncertainty_sampling_strategy(self, itr, confidence_threshold):
         if self.selection_criterion == 'random':
@@ -137,7 +148,8 @@ class ActiveLearningPipeline:
                                                                                         self.train_indices)
         elif self.selection_criterion == 'ceal':
             self.available_pool_indices, self.train_indices, self.high_confidence_labels, self.high_confidence_indices = _uncertainty_ceal_sampling(
-                confidence_threshold, self.model, self.device, self.available_pool_indices, self.train_df, self.budget_per_iter,
+                confidence_threshold, self.model, self.device, self.available_pool_indices, self.train_df,
+                self.budget_per_iter,
                 self.train_indices)
 
     def calculate_class_weights(self, label_counts, num_classes=8):
