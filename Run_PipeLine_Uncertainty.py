@@ -28,7 +28,7 @@ def main():
     iterations = 20
     budget_per_iter = 60
     num_epoch = 15
-    selection_criteria = ['competence_based'] #'random', 'uncertainty_vit', 'competence_based', 'pred_prob', 'ceal'
+    selection_criteria = ['random', 'uncertainty_vit', 'competence_based', 'pred_prob', 'ceal']
     accuracy_scores_dict = defaultdict(list)
 
     for criterion in selection_criteria:
@@ -49,7 +49,7 @@ def main():
                                           train_df=train_df,
                                           appraoch='Uncertainty')
         accuracy_scores_dict[criterion] = AL_class.run_pipeline()
-    with open('competence_accuracy.pkl', 'wb') as file: #uncertainty_approaches
+    with open('uncertainty_approaches_accuracy.pkl', 'wb') as file:
         # Write the list to the file using pickle
         pickle.dump(accuracy_scores_dict, file)
 if __name__ == "__main__":

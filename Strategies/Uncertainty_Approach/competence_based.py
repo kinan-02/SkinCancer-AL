@@ -22,7 +22,7 @@ def calc_pscores_cdf(outputs, c):
     p_scores = []
     for prob in probabilities_cpu:
         max_prob = np.max(prob)
-        p_score = (1 - max_prob)
+        p_score = (1 - max_prob) / max_prob
         p_scores.append(p_score)
 
     p_scores = np.array(p_scores)
