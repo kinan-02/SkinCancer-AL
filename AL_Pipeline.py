@@ -104,7 +104,7 @@ class ActiveLearningPipeline:
                                                                                          self.iterations + 1,
                                                                                          self.budget_per_iter,
                                                                                          self.train_indices)
-        elif self.selection_criterion == 'deepfool':
+        elif self.selection_criterion == 'deepfool_100' or self.selection_criterion == 'deepfool_200':
             self.available_pool_indices, self.train_indices = _adversial_attack_sampling(self.available_pool_indices,
                                                                                          self.train_df, self.model,
                                                                                          self.device,
