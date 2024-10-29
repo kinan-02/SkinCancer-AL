@@ -334,7 +334,7 @@ class ActiveLearningPipeline:
         """
         model, feature_extractor = get_vit_model()
         # feature_extractor = feature_extractor.to(self.device)
-        # model = model.to(self.device)
+        model = model.to(self.device)
 
         train_images = [self.train_df.__getitem__(index)[0] for index in self.train_indices]
         train_images_tensor = torch.stack(train_images)
