@@ -72,7 +72,7 @@ def select_indices(outputs, c, budget_per_iter, iterations, pool_features, pool_
 
     selected_indices = np.argsort(uncertainties)[-(budget_per_iter * iterations):]
 
-    selected_indices, pool_features, pool_indices = _kmean_uncertin_samples(selected_indices, pool_features,
+    selected_indices, pool_features, pool_indices = _kmean_uncertin_samples(selected_indices, budget_per_iter, pool_features,
                                                                             pool_indices)
 
     train_indices = train_indices + selected_indices
