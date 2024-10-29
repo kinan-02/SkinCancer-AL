@@ -27,14 +27,11 @@ def main():
 
     iterations = 20
     budget_per_iter = 60
-    selection_criteria = ['random', 'uncertainty_vit', 'competence_based', 'pred_prob', 'ceal'] #'deepfool',
+    num_epoch = 15
+    selection_criteria = ['competence_based'] #'random', 'uncertainty_vit', 'competence_based', 'pred_prob', 'ceal'
     accuracy_scores_dict = defaultdict(list)
 
     for criterion in selection_criteria:
-        if criterion == 'competence_based':
-            num_epoch = 30
-        else:
-            num_epoch = 15
         set_seed()
         resnet = ourResNet()
         model, optimizer, device = resnet.get_model()
@@ -52,7 +49,7 @@ def main():
                                           train_df=train_df,
                                           appraoch='Uncertainty')
         accuracy_scores_dict[criterion] = AL_class.run_pipeline()
-    with open('uncertainty_approaches_accuracy.pkl', 'wb') as file:
+    with open('competence_accuracy.pkl', 'wb') as file: #uncertainty_approaches
         # Write the list to the file using pickle
         pickle.dump(accuracy_scores_dict, file)
 if __name__ == "__main__":
