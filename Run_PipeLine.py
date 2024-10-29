@@ -27,11 +27,14 @@ def main():
 
     iterations = 20
     budget_per_iter = 60
-    num_epoch = 15
     selection_criteria = ['random', 'uncertainty_vit', 'competence_based', 'pred_prob', 'ceal'] #'deepfool',
     accuracy_scores_dict = defaultdict(list)
 
     for criterion in selection_criteria:
+        if criterion == 'competence_based':
+            num_epoch = 30
+        else:
+            num_epoch = 15
         set_seed()
         resnet = ourResNet()
         model, optimizer, device = resnet.get_model()
