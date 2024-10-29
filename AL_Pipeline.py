@@ -57,8 +57,13 @@ class ActiveLearningPipeline:
         self.selection_criterion = selection_criterion
         self.num_epochs = num_epochs
         self.train_df = train_df
+        # CEAL
         self.high_confidence_labels = []
         self.high_confidence_indices = []
+        # Diversity Approach
+        self.pool_features = []
+        self.pool_indices = []
+        self.train_features = []
 
     def run_pipeline(self):
         """
@@ -242,3 +247,57 @@ class ActiveLearningPipeline:
                 total_predictions += inputs.shape[0]
         test_acc = running_corrects.double() / total_predictions
         return test_acc.item()
+
+    def extract_vae_features(self, dataloader, model, feature_extractor):
+        """
+        Return the latent vector for each image and the corresponding indices.
+        """
+        features_list = []
+        indices_list = []
+
+        with torch.no_grad():
+            for images, indices in dataloader:
+                images = images.to(device)
+                images_list = [transforms.ToPILImage()(img) for img in images]
+                inputs = feature_extractor(images=images_list, return_tensors="pt")
+                with torch.no_grad():
+                    inputs = inputs.to(device)
+                    outputs = model(**inputs)
+
+                x = outputs.last_hidden_state[:, 0, :]
+                features_list.append(x.cpu().numpy())
+
+                # Collect indices
+                indices_list.extend(indices)
+
+        # Stack all features into a 2D array (n_samples, hidden_dim)
+        features = np.vstack(features_list)
+
+        return features, indices_list
+
+    def _get_features(self):
+        """
+        Creates latent feature vectors for each image in the available pool using a pre-trained Vision Transformer (ViT) model from Google.
+        """
+        feature_extractor = ViTFeatureExtractor.from_pretrained('google/vit-base-patch16-224-in21k')
+        feature_extractor = feature_extractor.to(device)
+        model = ViTModel.from_pretrained('google/vit-base-patch16-224-in21k')
+        model = model.to(device)
+
+        train_images = [train_df.__getitem__(index)[0] for index in self.train_indices]
+        train_images_tensor = torch.stack(train_images)
+        label_df_tensor = torch.tensor(self.train_indices)
+        train_dataset = TensorDataset(train_images_tensor, label_df_tensor)
+        batch_size = 32
+        train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+        self.train_features, self.train_indices = self.extract_vae_features(train_loader, model, feature_extractor)
+
+        X_unlabeled = [train_df.__getitem__(index)[0] for index in self.available_pool_indices]
+        pool_images_tensor = torch.stack(X_unlabeled)
+        pool_indices_tensor = torch.tensor(self.available_pool_indices)
+        pool_dataset = TensorDataset(pool_images_tensor, pool_indices_tensor)
+
+        batch_size = 32
+        pool_loader = DataLoader(pool_dataset, batch_size=batch_size, shuffle=False)
+
+        self.pool_features, self.pool_indices = self.extract_vae_features(pool_loader, model, feature_extractor)
