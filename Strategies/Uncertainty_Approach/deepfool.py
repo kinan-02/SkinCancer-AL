@@ -1,7 +1,9 @@
 import foolbox as fb
 import numpy as np
+import torch
+from torch.utils.data import TensorDataset, DataLoader
 
-def adversial_attack(adversarial_images, device, inputs, model, index, fmodel, epsilons):
+def adversial_attack(attack, adversarial_images, device, inputs, model, index, fmodel, epsilons):
     inputs = inputs.to(device)
     x = model(inputs)
     _, preds = torch.max(x, 1)
@@ -42,7 +44,7 @@ def _adversial_attack_sampling(available_pool_indices, train_df, model, device, 
     model.eval()
     epsilons = [0.01]
     for inputs, index in pool_loader:
-        adversial_attack(adversarial_images, device, inputs, model, index, fmodel, epsilons)
+        adversial_attack(attack, adversarial_images, device, inputs, model, index, fmodel, epsilons)
     # Sort the images according to the norm with the adversial, and taking the samples with the lowest norm.
     adversarial_images = sorted(adversarial_images, key=lambda x: x[0])
     selected_indices = [t[1] for t in adversarial_images[:budget_per_iter]]
