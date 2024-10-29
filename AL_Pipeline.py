@@ -333,7 +333,7 @@ class ActiveLearningPipeline:
         Creates latent feature vectors for each image in the available pool using a pre-trained Vision Transformer (ViT) model from Google.
         """
         model, feature_extractor = get_vit_model()
-        feature_extractor = feature_extractor.to(self.device)
+        # feature_extractor = feature_extractor.to(self.device)
         model = model.to(self.device)
 
         train_images = [self.train_df.__getitem__(index)[0] for index in self.train_indices]
