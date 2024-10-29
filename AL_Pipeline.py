@@ -1,5 +1,5 @@
 import os.path
-
+from transformers import ViTFeatureExtractor, ViTModel
 import numpy as np
 from collections import defaultdict
 import random
@@ -12,7 +12,9 @@ from Strategies.Uncertainty_Approach.competence_based import _competence_based_s
 from Strategies.Uncertainty_Approach.deepfool import _adversial_attack_sampling
 from Strategies.Uncertainty_Approach.prediction_probability_based import _pred_prob_based_sampling
 from Strategies.Uncertainty_Approach.ceal import _uncertainty_ceal_sampling
-
+from Strategies.Diversity_Approach.kmeans_budget_vit import _kmeans_sampling
+from torchvision import transforms
+from Initials.ViT import get_vit_model
 
 def set_seed():
     random.seed(0)  # Set seed for NumPy
@@ -44,7 +46,7 @@ class ActiveLearningPipeline:
                  iterations,
                  budget_per_iter,
                  num_epochs,
-                 device, optimizer, val_loader, test_loader, train_df):
+                 device, optimizer, val_loader, test_loader, train_df, appraoch):
         self.model = model
         self.device = device
         self.optimizer = optimizer
@@ -57,6 +59,7 @@ class ActiveLearningPipeline:
         self.selection_criterion = selection_criterion
         self.num_epochs = num_epochs
         self.train_df = train_df
+        self.approach = appraoch
         # CEAL
         self.high_confidence_labels = []
         self.high_confidence_indices = []
@@ -74,6 +77,8 @@ class ActiveLearningPipeline:
         accuracy_scores = []
         confidence_threshold = 0.05
         dr = 0.0033
+        if self.appraoch == "Diversity" or (self.approach == "Hybrid" and self.selection_criterion != 'BADGE'):
+            self._get_features()
         for iteration in range(self.iterations + 1):
             print(f"--------- Number of Iteration {iteration} ---------")
             train_images = [self.train_df.__getitem__(index)[0] for index in self.train_indices]
@@ -88,11 +93,20 @@ class ActiveLearningPipeline:
                 self.model.load_state_dict(torch.load(path))
             accuracy = self._evaluate_model()
             accuracy_scores.append(accuracy)
-            self._sampling_strategy(iteration, confidence_threshold)
+            if self.approach == "Uncertainty":
+                self._uncertainty_sampling_strategy(iteration, confidence_threshold)
+            elif self.approach == "Diversity":
+                self._diversity_sampling_strategy()
+            else:
+                self._hybrid_sampling_strategy(iteration, confidence_threshold)
             confidence_threshold -= dr * iteration
         return accuracy_scores
+    def _diversity_sampling_strategy(self):
+        if self.selection_criterion == 'kmeans_budget':
+            self.available_pool_indices, self.train_indices, self.pool_features, self.pool_indices = (
+                _kmeans_sampling(self.available_pool_indices, self.budget_per_iter, self.pool_features, self.pool_indices, self.train_indices))
 
-    def _sampling_strategy(self, itr, confidence_threshold):
+    def _uncertainty_sampling_strategy(self, itr, confidence_threshold):
         if self.selection_criterion == 'random':
             self.available_pool_indices, self.train_indices = _random_sampling(self.available_pool_indices,
                                                                                self.budget_per_iter,
@@ -257,11 +271,11 @@ class ActiveLearningPipeline:
 
         with torch.no_grad():
             for images, indices in dataloader:
-                images = images.to(device)
+                images = images.to(self.device)
                 images_list = [transforms.ToPILImage()(img) for img in images]
                 inputs = feature_extractor(images=images_list, return_tensors="pt")
                 with torch.no_grad():
-                    inputs = inputs.to(device)
+                    inputs = inputs.to(self.device)
                     outputs = model(**inputs)
 
                 x = outputs.last_hidden_state[:, 0, :]
@@ -279,12 +293,11 @@ class ActiveLearningPipeline:
         """
         Creates latent feature vectors for each image in the available pool using a pre-trained Vision Transformer (ViT) model from Google.
         """
-        feature_extractor = ViTFeatureExtractor.from_pretrained('google/vit-base-patch16-224-in21k')
-        feature_extractor = feature_extractor.to(device)
-        model = ViTModel.from_pretrained('google/vit-base-patch16-224-in21k')
-        model = model.to(device)
+        model, feature_extractor = get_vit_model()
+        feature_extractor = feature_extractor.to(self.device)
+        model = model.to(self.device)
 
-        train_images = [train_df.__getitem__(index)[0] for index in self.train_indices]
+        train_images = [self.train_df.__getitem__(index)[0] for index in self.train_indices]
         train_images_tensor = torch.stack(train_images)
         label_df_tensor = torch.tensor(self.train_indices)
         train_dataset = TensorDataset(train_images_tensor, label_df_tensor)
@@ -292,7 +305,7 @@ class ActiveLearningPipeline:
         train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
         self.train_features, self.train_indices = self.extract_vae_features(train_loader, model, feature_extractor)
 
-        X_unlabeled = [train_df.__getitem__(index)[0] for index in self.available_pool_indices]
+        X_unlabeled = [self.train_df.__getitem__(index)[0] for index in self.available_pool_indices]
         pool_images_tensor = torch.stack(X_unlabeled)
         pool_indices_tensor = torch.tensor(self.available_pool_indices)
         pool_dataset = TensorDataset(pool_images_tensor, pool_indices_tensor)

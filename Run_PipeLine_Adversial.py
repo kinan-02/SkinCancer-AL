@@ -49,7 +49,8 @@ def main():
                                           optimizer=optimizer,
                                           val_loader=val_loader,
                                           test_loader=test_loader,
-                                          train_df=train_df)
+                                          train_df=train_df,
+                                          appraoch='Uncertainty')
         accuracy_scores_dict[criterion] = AL_class.run_pipeline()
     with open('adversial_accuracy.pkl', 'wb') as file:
         # Write the list to the file using pickle
