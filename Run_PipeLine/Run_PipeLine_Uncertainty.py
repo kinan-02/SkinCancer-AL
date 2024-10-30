@@ -1,6 +1,6 @@
-from AL_Pipeline import ActiveLearningPipeline
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from AL_Pipeline import ActiveLearningPipeline
 from DataSet.data import import_data_loaders
 import numpy as np
 import torch, pickle, random
