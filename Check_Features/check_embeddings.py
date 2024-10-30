@@ -62,20 +62,23 @@ def main():
     distances, indices = knn.kneighbors(features)
     k_nearest_labels = np.array(labels)[indices]
 
-    percentages = []
+    weighted_percentages = []
     for i in range(len(labels)):
-        # Compare the sample's label with the labels of its nearest neighbors
         sample_label = labels[i]
         neighbors_labels = k_nearest_labels[i]
-        # Count how many neighbors have the same label as the sample
-        unmatch_count = np.sum(neighbors_labels != sample_label)
-        # Calculate percentage
-        unmatch_percentage = (unmatch_count / k) * 100
-        # Append the match percentage for this sample
-        percentages.append(unmatch_percentage)
+        neighbors_distances = distances[i]
+        # Avoid division by zero by adding a small value to distances
+        weights = 1 / (neighbors_distances + 1e-8)  # Inverse of the distance
+        # Normalize weights to sum to 1
+        normalized_weights = weights / np.sum(weights)
+        # Create a boolean array where True means the label matches the sample's label
+        unmatches = (neighbors_labels != sample_label).astype(float)
+        # Calculate the weighted sum of matches
+        weighted_unmatch_percentage = np.sum(unmatches * normalized_weights) * 100
+        weighted_percentages.append(weighted_unmatch_percentage)
     # Now `percentages` contains the percentage of matching neighbors for each sample
-    percentages = np.array(percentages)
-    print(np.mean(percentages))
+    percentages = np.mean(weighted_percentages)
+    print(percentages)
     # y_pred = knn.predict(features)
     # accuracy = accuracy_score(labels, y_pred)
     # print(f"Accuracy: {accuracy:.2f}")
