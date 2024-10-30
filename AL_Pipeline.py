@@ -116,7 +116,7 @@ class ActiveLearningPipeline:
         return accuracy_scores
 
     def _hybrid_sampling_strategy(self):
-        if self.selection_criterion == 'BADGE':
+        if self.selection_criterion in ['BADGE','BADGE_30'] :
             self.available_pool_indices, self.train_indices = _badge_sampling(self.model, self.train_df,
                                                                               self.available_pool_indices,
                                                                               self.train_indices, self.device,
@@ -157,12 +157,12 @@ class ActiveLearningPipeline:
             self.available_pool_indices, self.train_indices = _random_sampling(self.available_pool_indices,
                                                                                self.budget_per_iter,
                                                                                self.train_indices)
-        elif self.selection_criterion == 'uncertainty_ae' or self.selection_criterion == 'uncertainty_vit':
+        elif self.selection_criterion in ['uncertainty_ae','uncertainty_vit']:
             self.available_pool_indices, self.train_indices = _uncertainty_sampling(self.model, self.train_df,
                                                                                     self.available_pool_indices,
                                                                                     self.train_indices, self.device,
                                                                                     self.budget_per_iter)
-        elif self.selection_criterion == 'competence_based' or self.selection_criterion == ('competence_based'+str(self.C0*100)):
+        elif self.selection_criterion in ['competence_based','competence_based'+str(self.C0*100)]:
             self.available_pool_indices, self.train_indices = _competence_based_sampling(self.model, itr,
                                                                                          self.train_df,
                                                                                          self.available_pool_indices,
@@ -170,14 +170,14 @@ class ActiveLearningPipeline:
                                                                                          self.iterations + 1,
                                                                                          self.budget_per_iter,
                                                                                          self.train_indices,self.C0)
-        elif self.selection_criterion == 'deepfool_100' or self.selection_criterion == 'deepfool_200':
+        elif self.selection_criterion in ['deepfool_100','deepfool_200']:
             self.available_pool_indices, self.train_indices = _adversial_attack_sampling(
                 self.available_pool_indices,
                 self.train_df, self.model,
                 self.device,
                 self.budget_per_iter,
                 self.train_indices)
-        elif self.selection_criterion == 'pred_prob':
+        elif self.selection_criterion in ['pred_prob','pred_prob_30']:
             self.available_pool_indices, self.train_indices = _pred_prob_based_sampling(self.model, self.train_df,
                                                                                         self.available_pool_indices,
                                                                                         self.device,
