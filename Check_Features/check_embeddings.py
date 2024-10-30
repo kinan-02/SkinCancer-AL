@@ -48,12 +48,15 @@ def extract_features(dataloader, model, feature_extractor, device):
 
 def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print("Loading data...")
     train_df, val_loader, test_loader = import_data_loaders()
     model, feature_extractor = get_vit_model()
+    model = model.to(device)
     train_loader = DataLoader(train_df, batch_size=32, shuffle=False)
+    print("Generating features...")
     features, labels, indices = extract_features(train_loader, model, feature_extractor, device)
+    print("KNN classifier...")
     knn = KNeighborsClassifier(n_neighbors=3)
-
     knn.fit(features, labels)
     y_pred = knn.predict(features)
     accuracy = accuracy_score(labels, y_pred)
