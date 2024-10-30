@@ -1,4 +1,5 @@
 import sys, os
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from AL_Pipeline import ActiveLearningPipeline
 from DataSet.data import import_data_loaders
@@ -6,6 +7,8 @@ import numpy as np
 import torch, pickle, random
 from collections import defaultdict
 from ResNet import ourResNet
+
+
 def set_seed():
     random.seed(0)  # Set seed for NumPy
     np.random.seed(0)  # Set seed for PyTorch (for both CPU and GPU)
@@ -14,6 +17,7 @@ def set_seed():
         torch.cuda.manual_seed_all(0)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
+
 
 def main():
     train_df, val_loader, test_loader = import_data_loaders()
@@ -50,10 +54,12 @@ def main():
                                           val_loader=val_loader,
                                           test_loader=test_loader,
                                           train_df=train_df,
-                                          appraoch='Uncertainty')
+                                          appraoch='Uncertainty', C0=0.5)
         accuracy_scores_dict[criterion] = AL_class.run_pipeline()
     with open('adversial_accuracy.pkl', 'wb') as file:
         # Write the list to the file using pickle
         pickle.dump(accuracy_scores_dict, file)
+
+
 if __name__ == "__main__":
     main()

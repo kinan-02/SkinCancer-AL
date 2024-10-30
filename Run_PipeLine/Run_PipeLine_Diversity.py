@@ -47,7 +47,7 @@ def main():
                                           val_loader=val_loader,
                                           test_loader=test_loader,
                                           train_df=train_df,
-                                          appraoch='Diversity')
+                                          appraoch='Diversity',C0=0.5)
         accuracy_scores_dict[criterion] = AL_class.run_pipeline()
     with open('Diversity_approach_accuracy.pkl', 'wb') as file:
         # Write the list to the file using pickle

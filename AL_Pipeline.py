@@ -54,7 +54,7 @@ class ActiveLearningPipeline:
                  iterations,
                  budget_per_iter,
                  num_epochs,
-                 device, optimizer, val_loader, test_loader, train_df, appraoch):
+                 device, optimizer, val_loader, test_loader, train_df, appraoch,C0):
         self.model = model
         self.device = device
         self.optimizer = optimizer
@@ -68,6 +68,7 @@ class ActiveLearningPipeline:
         self.num_epochs = num_epochs
         self.train_df = train_df
         self.approach = appraoch
+        self.C0 =C0
         # CEAL
         self.high_confidence_labels = []
         self.high_confidence_indices = []
@@ -161,14 +162,14 @@ class ActiveLearningPipeline:
                                                                                     self.available_pool_indices,
                                                                                     self.train_indices, self.device,
                                                                                     self.budget_per_iter)
-        elif self.selection_criterion == 'competence_based':
+        elif self.selection_criterion == 'competence_based' or self.selection_criterion == ('competence_based'+str(self.C0*100)):
             self.available_pool_indices, self.train_indices = _competence_based_sampling(self.model, itr,
                                                                                          self.train_df,
                                                                                          self.available_pool_indices,
                                                                                          self.device,
                                                                                          self.iterations + 1,
                                                                                          self.budget_per_iter,
-                                                                                         self.train_indices)
+                                                                                         self.train_indices,self.C0)
         elif self.selection_criterion == 'deepfool_100' or self.selection_criterion == 'deepfool_200':
             self.available_pool_indices, self.train_indices = _adversial_attack_sampling(
                 self.available_pool_indices,

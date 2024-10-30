@@ -59,7 +59,7 @@ def update_indices(available_pool_indices, sampled_indices, train_indices):
 
 
 def _competence_based_sampling(model, itr, train_df, available_pool_indices, device, iterations, budget_per_iter,
-                               train_indices):
+                               train_indices, C0):
     pool_loader = _get_poolLoader(available_pool_indices, train_df)
     batch_size = 32
     model.eval()
@@ -76,7 +76,6 @@ def _competence_based_sampling(model, itr, train_df, available_pool_indices, dev
                 x = torch.cat([x, padding_tensor])
             outputs.append(x)
     p_scores, cdf = calc_pscores_cdf(outputs, c)
-    C0 = 0.5
     c_t = min(1, np.sqrt((itr / iterations) * (1 - C0 ** 2) / iterations + C0 ** 2))
 
     selected_indices = np.where(p_scores > c_t)[0]

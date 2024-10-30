@@ -26,19 +26,19 @@ def main():
         available_pool_indices.append(index)
 
     iterations = 20
-    selection_criteria = ['kmeans_budget', 'KMeans_Nearest', 'KMeans_NearestFarthest']
-    num_epoch = 15
     budget_per_iter = 60
+    num_epoch = 15
+    C0 = [0.25,0.5,0.75]
     accuracy_scores_dict = defaultdict(list)
 
-    for criterion in selection_criteria:
+    for c in C0:
         set_seed()
         resnet = ourResNet()
         model, optimizer, device = resnet.get_model()
         AL_class = ActiveLearningPipeline(model=model,
                                           available_pool_indices=available_pool_indices,
                                           train_indices=vit_initials,
-                                          selection_criterion=criterion,
+                                          selection_criterion='competence_based'+str(c*100),
                                           iterations=iterations,
                                           budget_per_iter=budget_per_iter,
                                           num_epochs=num_epoch,
@@ -47,9 +47,9 @@ def main():
                                           val_loader=val_loader,
                                           test_loader=test_loader,
                                           train_df=train_df,
-                                          appraoch='Diversity',C0=0.5)
+                                          appraoch='Uncertainty',C0=c)
         accuracy_scores_dict[criterion] = AL_class.run_pipeline()
-    with open('kmeans_accuracy.pkl', 'wb') as file:
+    with open('competence_based_C0_accuracy.pkl', 'wb') as file: #uncertainty_approaches
         # Write the list to the file using pickle
         pickle.dump(accuracy_scores_dict, file)
 if __name__ == "__main__":
