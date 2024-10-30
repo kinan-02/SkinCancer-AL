@@ -56,7 +56,7 @@ def main():
     print("Generating features...")
     features, labels, indices = extract_features(train_loader, model, feature_extractor, device)
     print("KNN classifier...")
-    knn = KNeighborsClassifier(n_neighbors=3)
+    knn = KNeighborsClassifier(n_neighbors=4)
     knn.fit(features, labels)
     y_pred = knn.predict(features)
     accuracy = accuracy_score(labels, y_pred)
