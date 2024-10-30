@@ -56,11 +56,29 @@ def main():
     print("Generating features...")
     features, labels, indices = extract_features(train_loader, model, feature_extractor, device)
     print("KNN classifier...")
-    knn = KNeighborsClassifier(n_neighbors=4)
+    k = 3
+    knn = KNeighborsClassifier(n_neighbors=k)
     knn.fit(features, labels)
-    y_pred = knn.predict(features)
-    accuracy = accuracy_score(labels, y_pred)
-    print(f"Accuracy: {accuracy:.2f}")
+    distances, indices = knn.kneighbors(features)
+    k_nearest_labels = np.array(labels)[indices]
+
+    percentages = []
+    for i in range(len(labels)):
+        # Compare the sample's label with the labels of its nearest neighbors
+        sample_label = labels[i]
+        neighbors_labels = k_nearest_labels[i]
+        # Count how many neighbors have the same label as the sample
+        unmatch_count = np.sum(neighbors_labels != sample_label)
+        # Calculate percentage
+        unmatch_percentage = (unmatch_count / k) * 100
+        # Append the match percentage for this sample
+        percentages.append(unmatch_percentage)
+    # Now `percentages` contains the percentage of matching neighbors for each sample
+    percentages = np.array(percentages)
+    print(np.mean(percentages))
+    # y_pred = knn.predict(features)
+    # accuracy = accuracy_score(labels, y_pred)
+    # print(f"Accuracy: {accuracy:.2f}")
 
 if __name__ == "__main__":
     main()
