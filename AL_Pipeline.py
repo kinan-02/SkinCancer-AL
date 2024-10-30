@@ -188,7 +188,7 @@ class ActiveLearningPipeline:
                 self.budget_per_iter,
                 self.train_indices)
         elif self.selection_criterion == 'uncertainty_comb':
-            self.available_pool_indices, self.train_indices = _custom_2_sampling(self.model, itr, 0.3,
+            self.available_pool_indices, self.train_indices = _custom_2_sampling(self.model, itr, 0.5,
                                                                                  self.available_pool_indices,
                                                                                  self.device, self.train_df,
                                                                                  self.iterations,
