@@ -6,6 +6,8 @@ import torch, pickle, random
 from torchvision import transforms
 from Initials.ViT import get_vit_model
 from torch.utils.data import TensorDataset, DataLoader
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
 
 def set_seed():
     random.seed(0)  # Set seed for NumPy
@@ -48,9 +50,14 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     train_df, val_loader, test_loader = import_data_loaders()
     model, feature_extractor = get_vit_model()
-    train_loader = DataLoader(train_df, batch_size=32, shuffle=True)
+    train_loader = DataLoader(train_df, batch_size=32, shuffle=False)
     features, labels, indices = extract_features(train_loader, model, feature_extractor, device)
+    knn = KNeighborsClassifier(n_neighbors=3)
 
+    knn.fit(features, labels)
+    y_pred = knn.predict(features)
+    accuracy = accuracy_score(labels, y_pred)
+    print(f"Accuracy: {accuracy:.2f}")
 
 if __name__ == "__main__":
     main()
