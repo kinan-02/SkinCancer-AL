@@ -1,6 +1,6 @@
-from AL_Pipeline import ActiveLearningPipeline
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from AL_Pipeline import ActiveLearningPipeline
 from DataSet.data import import_data_loaders
 import numpy as np
 import torch, pickle, random
@@ -17,7 +17,7 @@ def set_seed():
 
 def main():
     train_df, val_loader, test_loader = import_data_loaders()
-    with open('../Initials/vit_initials.pkl', 'rb') as file:
+    with open('Initials/vit_initials.pkl', 'rb') as file:
         vit_initials = pickle.load(file)
 
     available_pool_indices = []
