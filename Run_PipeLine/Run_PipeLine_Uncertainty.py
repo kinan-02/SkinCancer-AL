@@ -17,7 +17,7 @@ def set_seed():
 
 def main():
     train_df, val_loader, test_loader = import_data_loaders()
-    with open('Initials/vit_initials.pkl', 'rb') as file:
+    with open('../Initials/vit_initials.pkl', 'rb') as file:
         vit_initials = pickle.load(file)
 
     available_pool_indices = []

@@ -17,7 +17,7 @@ def set_seed():
 
 def main():
     train_df, val_loader, test_loader = import_data_loaders()
-    with open('Initials/vit_initials.pkl', 'rb') as file:
+    with open('../Initials/vit_initials.pkl', 'rb') as file:
         vit_initials = pickle.load(file)
 
     available_pool_indices = []
@@ -25,16 +25,13 @@ def main():
         image, label, index = train_df[i]
         available_pool_indices.append(index)
 
-    iterations = 6
-    selection_criteria = ['deepfool_100', 'deepfool_200']
+    iterations = 20
+    selection_criteria = ['kmeans_budget', 'KMeans_Nearest', 'KMeans_NearestFarthest']
     num_epoch = 15
+    budget_per_iter = 60
     accuracy_scores_dict = defaultdict(list)
 
     for criterion in selection_criteria:
-        if criterion == 'deepfool_100':
-            budget_per_iter = 100
-        else:
-            budget_per_iter = 200
         set_seed()
         resnet = ourResNet()
         model, optimizer, device = resnet.get_model()
@@ -50,9 +47,9 @@ def main():
                                           val_loader=val_loader,
                                           test_loader=test_loader,
                                           train_df=train_df,
-                                          appraoch='Uncertainty')
+                                          appraoch='Diversity')
         accuracy_scores_dict[criterion] = AL_class.run_pipeline()
-    with open('adversial_accuracy.pkl', 'wb') as file:
+    with open('kmeans_accuracy.pkl', 'wb') as file:
         # Write the list to the file using pickle
         pickle.dump(accuracy_scores_dict, file)
 if __name__ == "__main__":
