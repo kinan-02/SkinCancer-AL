@@ -65,14 +65,14 @@ def main():
     weighted_percentages = []
     for i in range(len(labels)):
         sample_label = labels[i]
-        neighbors_labels = k_nearest_labels[i]
+        neighbors_labels = np.array(k_nearest_labels[i])
         neighbors_distances = distances[i]
         # Avoid division by zero by adding a small value to distances
         weights = 1 / (neighbors_distances + 1e-8)  # Inverse of the distance
         # Normalize weights to sum to 1
         normalized_weights = weights / np.sum(weights)
         # Create a boolean array where True means the label matches the sample's label
-        unmatches = (np.array(neighbors_labels) != sample_label).astype(float)
+        unmatches = (neighbors_labels != sample_label).astype(float)
         # Calculate the weighted sum of matches
         weighted_unmatch_percentage = np.sum(unmatches * normalized_weights) * 100
         weighted_percentages.append(weighted_unmatch_percentage)
