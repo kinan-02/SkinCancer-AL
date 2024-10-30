@@ -72,7 +72,7 @@ def main():
         # Normalize weights to sum to 1
         normalized_weights = weights / np.sum(weights)
         # Create a boolean array where True means the label matches the sample's label
-        unmatches = (neighbors_labels != sample_label).astype(float)
+        unmatches = (np.array(neighbors_labels) != sample_label).astype(float)
         # Calculate the weighted sum of matches
         weighted_unmatch_percentage = np.sum(unmatches * normalized_weights) * 100
         weighted_percentages.append(weighted_unmatch_percentage)
