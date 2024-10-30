@@ -26,7 +26,7 @@ def main():
         available_pool_indices.append(index)
 
     iterations = 20
-    selection_criteria = ['BADGE', 'Uncertainty_KMeans', 'Custom']
+    selection_criteria = ['Pred_Prob_Kmeans'] #'BADGE', 'Uncertainty_KMeans', 'Custom'
     num_epoch = 15
     budget_per_iter = 60
     accuracy_scores_dict = defaultdict(list)
@@ -49,7 +49,7 @@ def main():
                                           train_df=train_df,
                                           appraoch='Hybrid')
         accuracy_scores_dict[criterion] = AL_class.run_pipeline()
-    with open('Hybrid_approach_accuracy.pkl', 'wb') as file:
+    with open('Pred_Prob_Kmeans_accuracy.pkl', 'wb') as file:
         # Write the list to the file using pickle
         pickle.dump(accuracy_scores_dict, file)
 
