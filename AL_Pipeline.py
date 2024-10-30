@@ -304,7 +304,7 @@ class ActiveLearningPipeline:
         test_acc = running_corrects.double() / total_predictions
         return test_acc.item()
 
-    def extract_vae_features(self, dataloader, model, feature_extractor):
+    def extract_features(self, dataloader, model, feature_extractor):
         """
         Return the latent vector for each image and the corresponding indices.
         """
@@ -345,7 +345,7 @@ class ActiveLearningPipeline:
         train_dataset = TensorDataset(train_images_tensor, label_df_tensor)
         batch_size = 32
         train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-        self.train_features, self.train_indices = self.extract_vae_features(train_loader, model, feature_extractor)
+        self.train_features, self.train_indices = self.extract_features(train_loader, model, feature_extractor)
 
         X_unlabeled = [self.train_df.__getitem__(index)[0] for index in self.available_pool_indices]
         pool_images_tensor = torch.stack(X_unlabeled)
@@ -355,4 +355,4 @@ class ActiveLearningPipeline:
         batch_size = 32
         pool_loader = DataLoader(pool_dataset, batch_size=batch_size, shuffle=False)
 
-        self.pool_features, self.pool_indices = self.extract_vae_features(pool_loader, model, feature_extractor)
+        self.pool_features, self.pool_indices = self.extract_features(pool_loader, model, feature_extractor)
