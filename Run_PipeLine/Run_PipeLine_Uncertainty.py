@@ -28,7 +28,7 @@ def main():
     iterations = 20
     budget_per_iter = 60
     num_epoch = 15
-    selection_criteria = ['uncertainty_comb'] # 'competence_based', 'random', 'uncertainty_vit', 'competence_based', 'pred_prob', 'ceal',
+    selection_criteria = ['uncertainty_comb', 'random', 'uncertainty_vit', 'competence_based', 'pred_prob', 'ceal']
     accuracy_scores_dict = defaultdict(list)
 
     for criterion in selection_criteria:
@@ -47,7 +47,7 @@ def main():
                                           val_loader=val_loader,
                                           test_loader=test_loader,
                                           train_df=train_df,
-                                          appraoch='Uncertainty',C0=0.5)
+                                          appraoch='Uncertainty',C0=0.75)
         accuracy_scores_dict[criterion] = AL_class.run_pipeline()
     with open('uncertainty_comb_accuracy.pkl', 'wb') as file: #uncertainty_approaches
         # Write the list to the file using pickle

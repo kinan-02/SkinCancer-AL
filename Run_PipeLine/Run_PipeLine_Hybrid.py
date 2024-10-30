@@ -26,7 +26,7 @@ def main():
         available_pool_indices.append(index)
 
     iterations = 20
-    selection_criteria = ['Pred_Prob_Kmeans'] #'BADGE', 'Uncertainty_KMeans', 'Custom'
+    selection_criteria = ['Pred_Prob_Kmeans', 'BADGE', 'Uncertainty_KMeans', 'Custom']
     num_epoch = 15
     budget_per_iter = 60
     accuracy_scores_dict = defaultdict(list)
