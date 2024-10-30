@@ -64,7 +64,7 @@ def main():
 
     weighted_percentages = []
     for i in range(len(labels)):
-        sample_label = labels[i]
+        sample_label = np.array(labels[i])
         neighbors_labels = np.array(k_nearest_labels[i])
         neighbors_distances = distances[i]
         # Avoid division by zero by adding a small value to distances
