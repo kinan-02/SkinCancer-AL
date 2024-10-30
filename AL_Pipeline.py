@@ -18,6 +18,7 @@ from Strategies.Diversity_Approach.similarity_based import _similarity_based_sam
 from Strategies.Hybrid_Approach.BADGE import _badge_sampling
 from Strategies.Hybrid_Approach.Uncertainty_KMeans import _uncertainty_kmeans_sampling
 from Strategies.Hybrid_Approach.custom_sampling import _custom_sampling
+from Strategies.Uncertainty_Approach.Uncertainty_Combination import _custom_2_sampling
 from torchvision import transforms
 from Initials.ViT import get_vit_model
 
@@ -181,6 +182,13 @@ class ActiveLearningPipeline:
                 confidence_threshold, self.model, self.device, self.available_pool_indices, self.train_df,
                 self.budget_per_iter,
                 self.train_indices)
+        elif self.selection_criterion == 'uncertainty_comb':
+            self.available_pool_indices, self.train_indices = _custom_2_sampling(self.model, itr, 0.7,
+                                                                                 self.available_pool_indices,
+                                                                                 self.device, self.train_df,
+                                                                                 self.iterations,
+                                                                                 self.budget_per_iter,
+                                                                                 self.train_indices)
 
     def calculate_class_weights(self, label_counts, num_classes=8):
         """
