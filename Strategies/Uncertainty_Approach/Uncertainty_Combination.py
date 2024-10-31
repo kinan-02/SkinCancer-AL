@@ -19,7 +19,7 @@ def calculate_p_score(probabilities_cpu, uncertainties, w):
     p_scores = []
     for prob in probabilities_cpu:
         max_prob = np.max(prob)
-        p_score = (1 - max_prob) / max_prob
+        p_score = (1 - max_prob)
         p_scores.append(p_score)
     p_scores = np.array(p_scores)
     p_scores = w * p_scores + (1 - w) * uncertainties
