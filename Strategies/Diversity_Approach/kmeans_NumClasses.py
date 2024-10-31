@@ -20,7 +20,6 @@ def get_representative_images(kmeans, pool_features, pool_indices, flag_Nearest)
             # Map the cluster number to the indices of the top k nearest images
             cluster_to_images[i] = [pool_indices[idx] for idx in nearest_indices]
 
-
         else:
             # Another approach
             nearest_indices = cluster_indices[np.argsort(distances)[:4]]
