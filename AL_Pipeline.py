@@ -14,7 +14,6 @@ from Strategies.Uncertainty_Approach.prediction_probability_based import _pred_p
 from Strategies.Uncertainty_Approach.ceal import _uncertainty_ceal_sampling
 from Strategies.Diversity_Approach.kmeans_budget_vit import _kmeans_sampling
 from Strategies.Diversity_Approach.kmeans_NumClasses import _kmeans_NumClasses_sampling
-from Strategies.Diversity_Approach.similarity_based import _similarity_based_sampling
 from Strategies.Hybrid_Approach.BADGE import _badge_sampling
 from Strategies.Hybrid_Approach.Uncertainty_KMeans import _uncertainty_kmeans_sampling
 from Strategies.Hybrid_Approach.custom_sampling import _custom_sampling
@@ -147,10 +146,6 @@ class ActiveLearningPipeline:
         if self.selection_criterion == 'KMeans_NearestFarthest':
             self.available_pool_indices, self.train_indices, self.pool_features, self.pool_indices = _kmeans_NumClasses_sampling(
                 self.pool_features, self.pool_indices, self.train_indices, self.available_pool_indices, False)
-        if self.selection_criterion == 'Similarity_based':
-            self.available_pool_indices, self.train_indices, self.train_features, self.pool_features, self.pool_indices = _similarity_based_sampling(
-                self.pool_features, self.pool_indices, self.train_features, self.train_indices, self.budget_per_iter,
-                self.available_pool_indices)
 
     def _uncertainty_sampling_strategy(self, itr, confidence_threshold):
         if self.selection_criterion == 'random':

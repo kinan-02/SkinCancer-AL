@@ -26,7 +26,7 @@ def main():
         available_pool_indices.append(index)
 
     iterations = 20
-    selection_criteria = ['KMeans_NearestFarthest', 'Similarity_based']
+    selection_criteria = ['KMeans_NearestFarthest']
     num_epoch = 15
     budget_per_iter = 60
     accuracy_scores_dict = defaultdict(list)
