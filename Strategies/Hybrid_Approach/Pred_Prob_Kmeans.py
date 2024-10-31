@@ -22,11 +22,11 @@ def get_representative_images(kmeans, pool_features, pool_indices):
         # Compute distances between each feature and the cluster centroid
         distances = np.linalg.norm(cluster_features - kmeans.cluster_centers_[i], axis=1)
 
+        nearest_indices = cluster_indices[np.argsort(distances)[:4]]
+        farthest_indices = cluster_indices[np.argsort(distances)[-3:]]
         # Map the cluster number to the index of the representative image
-        nearest_indices = cluster_indices[np.argsort(distances)[:1]]
-
-        # Map the cluster number to the indices of the top k nearest images
-        cluster_to_images[i] = [pool_indices[idx] for idx in nearest_indices]
+        cluster_to_images[i] = [pool_indices[idx] for idx in nearest_indices] + [pool_indices[idx] for idx in
+                                                                                 farthest_indices]
 
     return cluster_to_images
 
@@ -35,7 +35,7 @@ def _kmean_uncertin_samples(selected_indices, budget_per_iter, pool_features, po
     """
     returns the selected indices
     """
-    n_clusters = budget_per_iter
+    n_clusters = 8
     kmeans = KMeans(n_clusters=n_clusters, init='k-means++', random_state=0)
     kmeans.fit(pool_features[selected_indices])
 
