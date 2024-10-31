@@ -30,7 +30,7 @@ def main():
         available_pool_indices.append(index)
 
     iterations = 20
-    selection_criteria = [('Hybrid', 'BADGE_30'), ('Uncertainty', 'pred_prob_30'), ('Hybrid', 'Uncertainty_KMeans')]
+    selection_criteria = [('Hybrid', 'BADGE_30'), ('Uncertainty', 'pred_prob_30'), ('Hybrid', 'Uncertainty_KMeans_30')]
     num_epoch = 15
     budget_per_iter = 30
     accuracy_scores_dict = defaultdict(list)
