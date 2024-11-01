@@ -3,6 +3,12 @@ from sklearn.cluster import KMeans
 
 
 def get_representative_images(kmeans, pool_features, pool_indices, flag_Nearest):
+    """
+
+    :return:  returns a dictionary where the keys are the index of the cluster and the values are the closest images to
+     each centroid if the flag_Nearest is True else the values are the 4 closest
+    and 3 farthest images to each centroid  the note that the K of the KMeans is the number of classes.
+    """
     cluster_to_images = {}
     for i in range(kmeans.n_clusters):
         # Get the indices of all images in the current cluster
