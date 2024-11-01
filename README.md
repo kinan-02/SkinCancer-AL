@@ -94,9 +94,6 @@ Place the pre-trained model in the appropriate directory.
    python vit_vs_ae.py
    ```
 
-  
-
-
 ## 2. Running Different Sampling Strategies
 
 All custom sampling strategies for the project are located in the `Strategies` folder. the `Strategies` folder consists of 3 folders each approach in one folder, in each approach folder you will find the corresponding strategies.
@@ -113,8 +110,36 @@ All custom sampling strategies for the project are located in the `Strategies` f
 - The **default initialization** of the training set is performed using the Vision Transformer (ViT) model with KMeans++. If you wish to use the Autoencoder for initialization, you’ll need to modify the relevant commands in the scripts as explained in the previous section.
 - In the kmeans++ strategy we tested 3 different techniques, you can test them by choosing **{chosen approach} = Kmeans**.
   
+## 3. Hyperparameter Testing
+To optimize our model’s performance in active learning, we conducted several experiments with specific hyperparameters, which are documented in the following files:
 
-## 3. Visualizing Results
+- **Budget Testing**:  
+  The `Run_PipeLine_Budget_30.py` file tests the effect of different budgets (30 and 60) selected for each active learning iteration, allowing us to analyze how varying sample sizes impact model performance over time.
+  
+   ```sh
+   python Run_PipeLine/Run_PipeLine_Budget_30.py
+   ```
+   By running this command you will get a pickle file named `Budget_30_accuracy.pkl` that has the result of the BADGE, Prediction probability, and Uncertainty K-Means++ strategies.
+
+  **NOTE**:
+  - The default budget per iteration in the project is set to 60
+  
+
+- **Competence Strategy (`c0` constant)**:  
+  The `Run_PipeLine_competence.py` file explores the `c0` constant in our competence-based strategy. The constant `c0` affects the model's selection criteria for samples, impacting the difficulty level of chosen samples as training progresses.
+
+ ```sh
+   python Run_PipeLine/Run_PipeLine_competence.py
+   ```
+   By running this command you will get a pickle file named `competence_based_C0_accuracy.pkl` that has the result of the competence strategy with c0 = 0.25, 0.5, 0.75.
+  **NOTE**:
+  - The default c0 = 0.5
+---
+
+This explanation should give users an idea of what each file is for and why these parameters are being tested. You can add specific instructions or results for these files as needed!
+
+
+## 4. Visualizing Results
 
    - After running a strategy, you can visualize the results.
    - If you would like to generate the plots that were used in our paper, you need to run the `plots.ipynb` notebook.
