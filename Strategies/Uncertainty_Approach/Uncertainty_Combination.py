@@ -40,6 +40,8 @@ def select_indices(itr, iterations, p_scores, budget_per_iter):
             additional_samples = remaining_indices[:budget_per_iter - len(selected_indices)]
             sampled_indices.extend(additional_samples)
         else:
+            #if we have samples that are more than the budget we randomly pick samples from them
+            #using the cdf distribution in the sampling
             selected_cdf_values = cdf[selected_indices]
             selected_cdf_norm = selected_cdf_values / np.sum(selected_cdf_values)
             sampled_indices = np.random.choice(selected_indices, budget_per_iter, p=selected_cdf_norm,
