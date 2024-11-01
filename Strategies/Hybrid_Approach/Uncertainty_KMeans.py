@@ -33,7 +33,7 @@ def get_representative_images(kmeans, pool_features, pool_indices):
 
 def _kmean_uncertin_samples(selected_indices, budget_per_iter, pool_features, pool_indices):
     """
-    returns the selected indices
+    returns the selected indices, pool_features, pool_indices after applying KMeans
     """
     n_clusters = budget_per_iter
     kmeans = KMeans(n_clusters=n_clusters, init='k-means++', random_state=0)
