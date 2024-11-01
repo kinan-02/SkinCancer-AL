@@ -4,6 +4,10 @@ import torch
 from torch.utils.data import TensorDataset, DataLoader
 
 def adversial_attack(attack, adversarial_images, device, inputs, model, index, fmodel, epsilons):
+    """
+    this function generates the adversarial images for each sample and calculates the
+    distance of the generated image from the sample
+    """
     inputs = inputs.to(device)
     x = model(inputs)
     _, preds = torch.max(x, 1)
