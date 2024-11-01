@@ -82,7 +82,7 @@ By running this command you will get two pickle files: `ae_initials.pkl` and `vi
 - The two pickle files were provided in the Initials directory, so you can avoid running the script above.
 
 Please make sure the required dependencies (such as torch, sklearn, and the ViT pre-trained model) are installed.
-After running the notebook, the initialized training set will be ready for use in subsequent steps.
+After running the script, the initialized training set will be ready for use in subsequent steps.
 
 #### Note:
 - Download the pre-trained autoencoder model from our Google Drive (link provided in the "How to Get the Data" section).
