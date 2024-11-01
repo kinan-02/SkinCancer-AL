@@ -135,12 +135,19 @@ To optimize our model’s performance in active learning, we conducted several e
 
    **NOTE**:
    - The default c0 = 0.5
----
+     
+## 4.Test our hypothesis
+To check the hypothesis that we mentioned in the short discussion, Follow the instructions below:
+- Run the `check_embeddings.py` script.
+  
+   ```sh
+   python Check_Features/check_embeddings.py
+   ```
+   By running this command you will get the percentage of the mismatch.
 
-This explanation should give users an idea of what each file is for and why these parameters are being tested. You can add specific instructions or results for these files as needed!
 
 
-## 4. Visualizing Results
+## 5. Visualizing Results
 
    - After running a strategy, you can visualize the results.
    - If you would like to generate the plots that were used in our paper, you need to run the `plots.ipynb` notebook.
