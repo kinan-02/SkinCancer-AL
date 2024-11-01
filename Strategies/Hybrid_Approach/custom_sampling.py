@@ -25,7 +25,7 @@ def get_selected_indices(pool_features, misclassified_features, budget_per_iter,
         max_similarity = np.max(similarities)
         max_similarities.append(max_similarity)
 
-        # selected_indices is the indices of the samples from the pool that have the highest similarity to the misclassified samples
+    # selected_indices is the indices of the samples from the pool that have the highest similarity to the misclassified samples
     selected_indices = np.argsort(max_similarities)[:budget_per_iter]
     temp = np.array(available_pool_indices)
     selected_indices = temp[selected_indices]
