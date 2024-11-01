@@ -159,7 +159,8 @@ To check the hypothesis that we mentioned in the short discussion, Follow the in
      
  #### Note:
  
-   Ensure that the output of your chosen approach is saved correctly, as the plotting script will rely on this data to create the figures.
+   - Ensure that the output of your chosen approach is saved correctly, as the plotting script will rely on this data to create the figures.
+   - All the pickle files are provided in the `Accuracies` folder.
 
 ---
 This completes the instructions for running the scripts and processing the data for our project. We encourage you to explore the final results, consider potential improvements, and possibly extend the project with your ideas.
