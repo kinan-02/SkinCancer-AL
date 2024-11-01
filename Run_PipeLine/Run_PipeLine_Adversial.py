@@ -8,7 +8,9 @@ import torch, pickle, random
 from collections import defaultdict
 from ResNet import ourResNet
 
-
+"""
+This code is to run the Pipeline for the Deepfool strategies
+"""
 def set_seed():
     random.seed(0)  # Set seed for NumPy
     np.random.seed(0)  # Set seed for PyTorch (for both CPU and GPU)
