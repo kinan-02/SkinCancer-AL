@@ -136,7 +136,8 @@ To optimize our model’s performance in active learning, we conducted several e
    **NOTE**:
    - The default c0 = 0.5
      
-## 4.Test our hypothesis
+## 4. Test our hypothesis
+
 To check the hypothesis that we mentioned in the short discussion, Follow the instructions below:
 - Run the `check_embeddings.py` script.
   
@@ -144,7 +145,6 @@ To check the hypothesis that we mentioned in the short discussion, Follow the in
    python Check_Features/check_embeddings.py
    ```
    By running this command you will get the percentage of the mismatch.
-
 
 
 ## 5. Visualizing Results
@@ -159,9 +159,9 @@ To check the hypothesis that we mentioned in the short discussion, Follow the in
      
  #### Note:
  
-   Ensure that the output of your chosen strategy is saved correctly, as the plotting notebook will rely on this data to create the figures.
+   Ensure that the output of your chosen approach is saved correctly, as the plotting script will rely on this data to create the figures.
 
 ---
-This completes the instructions for running the notebooks and processing the data for our project. We encourage you to explore the final results, consider potential improvements, and possibly extend the project with your ideas.
+This completes the instructions for running the scripts and processing the data for our project. We encourage you to explore the final results, consider potential improvements, and possibly extend the project with your ideas.
 
 **Thank you for following through with our project workflow!**
