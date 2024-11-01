@@ -26,7 +26,7 @@ The experiments revealed that the feature extraction model significantly influen
 ## Installation
 **Clone the Repository**:
 
-   Clone this repository to your local machine using :
+   Clone this repository to your local machine using:
 
    ```sh
    git clone https://github.com/kinan-02/SkinCancer-AL.git
@@ -65,46 +65,49 @@ The dataset used for this project, including training, validation, and test sets
 - **test_dataset/**: Contains the images and csv file for the test set.
 - **validation_dataset/**: Contains the images and csv file for the validation set.
 
-Before running any scripts, make sure the dataset is set up correctly in the project directory and that you unzip the files you downloaded.
+Before running any scripts, make sure the dataset is set up correctly alongside the project directory and that you unzip the files you downloaded.
 
 ## How to Run
 
 ## 1. Obtaining the Initial Training Data
-Before running the main training loop, you need to initialize the training set using KMeans++ clustering on the extracted feature vectors. Follow the instructions below based on the model you wish to use for feature extraction:
+Before running the main training loop, you must initialize the training set using KMeans++ clustering on the extracted feature vectors. Follow the instructions below:
 
-- Open the initials folder
-- Open and run the `kmeans_initials.py` notebook.
+- Run the `kmeans_initials.py` script.
   
    ```sh
    python Initials/kmeans_initials.py
    ```
-by running this command you will get two pkl files : `ae_initials.pkl` and `vit_initials.pkl`
+By running this command you will get two pickle files: `ae_initials.pkl` and `vit_initials.pkl`
 
+- The two pickle files were provided in the Initials directory, so you can avoid running the script above.
 
-Ensure the required dependencies (such as torch, sklearn, and the ViT pre-trained model) are installed.
+Please make sure the required dependencies (such as torch, sklearn, and the ViT pre-trained model) are installed.
 After running the notebook, the initialized training set will be ready for use in subsequent steps.
 
 #### Note:
 - Download the pre-trained autoencoder model from our Google Drive (link provided in the "How to Get the Data" section).
 Place the pre-trained model in the appropriate directory.
-- In all strategies, we initialize the training set using KMeans++ with the kmeans_google_vit notebook by default. If you want to use the autoencoder for initialization, you must modify the corresponding cells in the training script accordingly.
+- In all strategies, we initialize the training set using KMeans++ with the vit_initials.pkl by default. If you want to use the autoencoder for initialization, you must modify the corresponding commands in the active learning pipeline script accordingly.
+
+  
 
 
 ## 2. Running Different Sampling Strategies
 
-All custom sampling strategies for the project are located in the `Strategies` folder. Each strategy is implemented in its own notebook, allowing you to easily experiment with different approaches to active learning.
+All custom sampling strategies for the project are located in the `Strategies` folder. the `Strategies` folder consists of 3 folders each approach in one folder, in each approach folder you will find the corresponding strategies.
 
-#### Steps to Run a Strategy:
-
-**Choose a Strategy**: 
-   - Navigate to the `Strategies` folder.
-   - Each notebook in this folder corresponds to a different active learning strategy. Review the strategies and select the one you want to run.
-   - Notebooks are named to reflect the specific strategy they implement (e.g., `random_sampling.ipynb`, `uncertainty_sampling.ipynb`, `custom_sampling_strategy.ipynb`, etc.).
+#### Steps to Run an approach:
+  chosen approach = Uncertainty, Diversity, Hybrid, Adversial
+  ```sh
+   python Run_PipeLine/Run_PipeLine_{chosen approach}.py
+   ```
      
 #### Note:
 
-- Each strategy has its own parameters and methods for selecting samples from the unlabeled pool, so you may want to experiment with different strategies to see which performs best for your task.
-- The **default initialization** of the training set is performed using the Vision Transformer (ViT) model with KMeans++. If you wish to use the Autoencoder for initialization, you’ll need to modify the relevant cells in the notebook as explained in the previous section.
+- Each strategy has its parameters and methods for selecting samples from the unlabeled pool, so you may want to experiment with different strategies to see which performs best for your task.
+- The **default initialization** of the training set is performed using the Vision Transformer (ViT) model with KMeans++. If you wish to use the Autoencoder for initialization, you’ll need to modify the relevant commands in the scripts as explained in the previous section.
+- In the kmeans++ strategy we tested 3 different techniques, you can test them by choosing **{chosen approach} = Kmeans**.
+  
 
 ## 3. Visualizing Results
 
