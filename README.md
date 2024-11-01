@@ -128,12 +128,13 @@ To optimize our model’s performance in active learning, we conducted several e
 - **Competence Strategy (`c0` constant)**:  
   The `Run_PipeLine_competence.py` file explores the `c0` constant in our competence-based strategy. The constant `c0` affects the model's selection criteria for samples, impacting the difficulty level of chosen samples as training progresses.
 
- ```sh
+   ```sh
    python Run_PipeLine/Run_PipeLine_competence.py
    ```
    By running this command you will get a pickle file named `competence_based_C0_accuracy.pkl` that has the result of the competence strategy with c0 = 0.25, 0.5, 0.75.
-  **NOTE**:
-  - The default c0 = 0.5
+
+   **NOTE**:
+   - The default c0 = 0.5
 ---
 
 This explanation should give users an idea of what each file is for and why these parameters are being tested. You can add specific instructions or results for these files as needed!
