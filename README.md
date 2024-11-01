@@ -88,6 +88,11 @@ After running the notebook, the initialized training set will be ready for use i
 - Download the pre-trained autoencoder model from our Google Drive (link provided in the "How to Get the Data" section).
 Place the pre-trained model in the appropriate directory.
 - In all strategies, we initialize the training set using KMeans++ with the vit_initials.pkl by default. If you want to use the autoencoder for initialization, you must modify the corresponding commands in the active learning pipeline script accordingly.
+- To compare the two performances using the initials mentioned above, Run the `vit_vs_ae.py` script.
+  
+   ```sh
+   python vit_vs_ae.py
+   ```
 
   
 
@@ -96,7 +101,7 @@ Place the pre-trained model in the appropriate directory.
 
 All custom sampling strategies for the project are located in the `Strategies` folder. the `Strategies` folder consists of 3 folders each approach in one folder, in each approach folder you will find the corresponding strategies.
 
-#### Steps to Run an approach:
+#### Run an approach:
   chosen approach = Uncertainty, Diversity, Hybrid, Adversial
   ```sh
    python Run_PipeLine/Run_PipeLine_{chosen approach}.py
