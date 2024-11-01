@@ -83,5 +83,7 @@ def _custom_2_sampling(model, itr, w, available_pool_indices, device, train_df, 
     probabilities_cpu = probabilities.cpu().numpy()
     uncertainties = entropy(probabilities_cpu, axis=1)
     p_scores = calculate_p_score(probabilities_cpu, uncertainties, w)
-    sampled_indices = select_indices(itr, iterations, p_scores, budget_per_iter)
+    # sampled_indices = select_indices(itr, iterations, p_scores, budget_per_iter)
+    sampled_indices = np.argsort(p_scores)[-budget_per_iter:]
+
     return update_indices(available_pool_indices, sampled_indices, train_indices)
