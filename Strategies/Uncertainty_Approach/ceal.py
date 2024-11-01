@@ -15,6 +15,16 @@ def get_pool_loader(available_pool_indices, train_df):
 
 
 def calculate_uncertainty(outputs, c, budget_per_iter, available_pool_indices, confidence_threshold):
+    """
+    this function returns the samples based on the entropy measure and samples that their entropy is less
+    than a threshold
+    :param outputs:
+    :param c:
+    :param budget_per_iter:
+    :param available_pool_indices:
+    :param confidence_threshold:
+    :return:
+    """
     probabilities = torch.cat(outputs, dim=0)
     # ignoring the paddings
     if c != 0:
