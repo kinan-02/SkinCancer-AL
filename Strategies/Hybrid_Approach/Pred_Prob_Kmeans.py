@@ -7,8 +7,8 @@ from scipy.stats import entropy
 
 def get_representative_images(kmeans, pool_features, pool_indices):
     """
-   returns a dictionary where the keys are the index of the cluster and the values are the closest images to
-   each centroid note that the K of the KMeans is the budget per iteration.
+   returns a dictionary where the keys are the index of the cluster and the values are the 4 closest
+    and 3 farthest images to each centroid note that the K of the KMeans is the number of classes.
     """
 
     cluster_to_images = {}
@@ -52,6 +52,12 @@ def _kmean_uncertin_samples(selected_indices, budget_per_iter, pool_features, po
 
 
 def get_DataLoader(train_df, available_pool_indices):
+    """
+
+    :param train_df:
+    :param available_pool_indices:
+    :return: the pool data loader
+    """
     X_unlabeled = [train_df.__getitem__(index)[0] for index in available_pool_indices]
 
     pool_images_tensor = torch.stack(X_unlabeled)
@@ -62,6 +68,12 @@ def get_DataLoader(train_df, available_pool_indices):
     return pool_loader
 
 def calculate_p_score(outputs, c):
+    """
+    this function calculates the pscore for each sample
+    :param outputs:
+    :param c:
+    :return: pscores np array
+    """
     probabilities = torch.cat(outputs, dim=0)
     # ignoring the paddings
     if c != 0:
@@ -97,7 +109,7 @@ def select_indices(outputs, c, budget_per_iter, iterations, pool_features, pool_
 def _Pred_prob_kmeans_sampling(model, train_df, available_pool_indices, device, budget_per_iter, iterations,
                                  pool_features, pool_indices, train_indices):
     """
-    Adds samples to the training set using a uncertainty-kmeans sampling strategy.
+    Adds samples to the training set using a Prediction-Probability-KMeans sampling strategy.
     """
 
     batch_size = 32
